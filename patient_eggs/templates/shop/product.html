@@ -4,19 +4,44 @@
 
 {% block content %}
 <div class="container">
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;">
+    <div style="margin-bottom: 2rem;">
+        <a href="{{ url_for('shop.index') }}" style="color: var(--accent-color); text-decoration: none; display: inline-flex; align-items: center; font-family: 'Montserrat', sans-serif;">
+            <span style="margin-right: 5px;">←</span> Back to Shop
+        </a>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; background-color: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
         <div>
             <img src="{{ url_for('static', filename='images/' + product.image) }}" 
                  alt="{{ product.name }}"
-                 style="width: 100%; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                 style="width: 100%; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: all 0.3s ease;">
         </div>
         <div>
-            <h1>{{ product.name }}</h1>
-            <p style="font-size: 1.2rem;">{{ product.description }}</p>
-            <p style="font-size: 1.5rem; color: var(--primary-color);">
+            <h1 style="font-size: 2.2rem; margin-bottom: 1rem;">{{ product.name }}</h1>
+            <div style="width: 50px; height: 3px; background-color: var(--highlight); margin-bottom: 1.5rem;"></div>
+            <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 2rem;">{{ product.description }}</p>
+            <p style="font-size: 1.6rem; color: var(--accent-color); font-weight: 700; margin-bottom: 2rem;">
                 ${{ "%.2f"|format(product.price) }} per {{ product.unit }}
             </p>
-            <a href="{{ url_for('shop.checkout', product_id=product.id) }}" class="btn">Buy Now</a>
+            <a href="{{ url_for('shop.checkout', product_id=product.id) }}" class="btn" style="padding: 1rem 2.5rem;">Add to Cart</a>
+        </div>
+    </div>
+    
+    <div style="margin-top: 4rem; padding: 2rem; background-color: var(--bg-color); border-radius: 12px;">
+        <h2 style="margin-bottom: 1.5rem; font-size: 1.8rem;">Why You'll Love Our {{ product.name }}</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+            <div>
+                <h3 style="color: var(--accent-color); margin-bottom: 0.8rem;">Farm Fresh</h3>
+                <p>Harvested daily from our family farm to ensure maximum freshness and flavor.</p>
+            </div>
+            <div>
+                <h3 style="color: var(--accent-color); margin-bottom: 0.8rem;">Ethically Sourced</h3>
+                <p>Our animals are raised with care in a free-range environment for the highest quality products.</p>
+            </div>
+            <div>
+                <h3 style="color: var(--accent-color); margin-bottom: 0.8rem;">Locally Produced</h3>
+                <p>Support local farming and reduce environmental impact with our locally produced goods.</p>
+            </div>
         </div>
     </div>
 </div>

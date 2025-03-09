@@ -4,17 +4,26 @@
 
 {% block content %}
 <div class="container">
-    <h1>Our Products</h1>
+    <div style="text-align: center; margin-bottom: 3rem;">
+        <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">Our Farm-Fresh Products</h1>
+        <p style="max-width: 700px; margin: 0 auto; font-size: 1.1rem; color: var(--text-color);">Each product is carefully prepared on our family farm with love and attention to quality</p>
+    </div>
+    
     <div class="product-grid">
         {% for product in products.values() %}
         <div class="product-card">
             <img src="{{ url_for('static', filename='images/' + product.image) }}" alt="{{ product.name }}">
             <h3>{{ product.name }}</h3>
-            <p>{{ product.description }}</p>
-            <p>${{ "%.2f"|format(product.price) }} per {{ product.unit }}</p>
+            <p style="margin-bottom: 1rem; font-size: 0.95rem;">{{ product.description }}</p>
+            <p style="font-size: 1.1rem; color: var(--accent-color); font-weight: 700; margin-bottom: 1.2rem;">${{ "%.2f"|format(product.price) }} per {{ product.unit }}</p>
             <a href="{{ url_for('shop.product', product_id=product.id) }}" class="btn">View Details</a>
         </div>
         {% endfor %}
+    </div>
+    
+    <div style="text-align: center; margin-top: 4rem; padding: 2rem; background-color: var(--card-bg); border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+        <h2 style="margin-bottom: 1rem;">Seasonal Availability</h2>
+        <p style="max-width: 700px; margin: 0 auto; font-size: 1rem;">Our products are made in small batches and availability may change with the seasons. Check back often for new offerings!</p>
     </div>
 </div>
 {% endblock %}

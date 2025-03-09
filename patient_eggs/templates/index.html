@@ -2,38 +2,43 @@
 
 {% block content %}
 <div class="hero">
-    <h1>Welcome to Patient Eggs</h1>
-    <p>Farm-fresh eggs and homestead products delivered with love</p>
-    <a href="{{ url_for('shop.index') }}" class="btn">Shop Now</a>
+    <div class="hero-content">
+        <h1>Welcome to Patient Eggs</h1>
+        <p>Farm-fresh eggs and homestead products delivered with love</p>
+        <a href="{{ url_for('shop.index') }}" class="btn">Shop Now</a>
+    </div>
 </div>
 
 <div class="container">
-    <h2>Featured Products</h2>
+    <h2 style="text-align: center; margin-bottom: 2.5rem; font-size: 2.2rem;">Featured Products</h2>
     <div class="product-grid">
         {% for product in featured_products %}
         <div class="product-card">
             <img src="{{ url_for('static', filename='images/' + product.image) }}" alt="{{ product.name }}">
             <h3>{{ product.name }}</h3>
-            <p>${{ "%.2f"|format(product.price) }} per {{ product.unit }}</p>
+            <p style="font-size: 1.1rem; color: var(--accent-color); font-weight: 700;">${{ "%.2f"|format(product.price) }} per {{ product.unit }}</p>
             <a href="{{ url_for('shop.product', product_id=product.id) }}" class="btn">View Details</a>
         </div>
         {% endfor %}
     </div>
     
-    <div style="text-align: center; margin-top: 4rem;">
-        <h2>Our Promise</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
-            <div>
-                <h3>Farm Fresh</h3>
-                <p>All our eggs are collected daily from happy, free-range hens</p>
+    <div style="text-align: center; margin-top: 5rem; padding: 3rem 1rem; background-color: var(--card-bg); border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+        <h2 style="margin-bottom: 2.5rem; font-size: 2.2rem;">Our Promise</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2.5rem; margin-top: 2rem;">
+            <div class="promise-card">
+                <div style="font-size: 2.5rem; color: var(--highlight); margin-bottom: 1rem;">🥚</div>
+                <h3 style="margin-bottom: 1rem;">Farm Fresh</h3>
+                <p style="font-size: 1rem; line-height: 1.7;">All our eggs are collected daily from happy, free-range hens that roam our pastures</p>
             </div>
-            <div>
-                <h3>Local & Sustainable</h3>
-                <p>Supporting local farming and sustainable practices</p>
+            <div class="promise-card">
+                <div style="font-size: 2.5rem; color: var(--highlight); margin-bottom: 1rem;">🌱</div>
+                <h3 style="margin-bottom: 1rem;">Local & Sustainable</h3>
+                <p style="font-size: 1rem; line-height: 1.7;">Supporting local farming and sustainable practices that respect the environment</p>
             </div>
-            <div>
-                <h3>Quality Guaranteed</h3>
-                <p>We stand behind the quality of all our products</p>
+            <div class="promise-card">
+                <div style="font-size: 2.5rem; color: var(--highlight); margin-bottom: 1rem;">✓</div>
+                <h3 style="margin-bottom: 1rem;">Quality Guaranteed</h3>
+                <p style="font-size: 1rem; line-height: 1.7;">We stand behind the quality of all our products with our satisfaction guarantee</p>
             </div>
         </div>
     </div>
