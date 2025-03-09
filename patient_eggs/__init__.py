@@ -1,5 +1,6 @@
 from flask import Flask
 from config import Config
+import datetime
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -10,5 +11,9 @@ def create_app(config_class=Config):
     
     app.register_blueprint(main_bp)
     app.register_blueprint(shop_bp, url_prefix='/shop')
+    
+    @app.context_processor
+    def inject_now():
+        return {'now': datetime.datetime.now()}
     
     return app
