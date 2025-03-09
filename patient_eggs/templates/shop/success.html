@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Thank You! - Patient Eggs{% endblock %}
+
+{% block content %}
+<div class="container" style="text-align: center; padding: 4rem 2rem;">
+    <h1>Thank You for Your Purchase!</h1>
+    <p style="font-size: 1.2rem; margin: 2rem 0;">
+        We appreciate your support of our small homestead farm.
+        Your order will be prepared with care and love.
+    </p>
+    <a href="{{ url_for('shop.index') }}" class="btn">Continue Shopping</a>
+</div>
+{% endblock %}
