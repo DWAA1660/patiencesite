@@ -3,12 +3,85 @@
 {% block title %}Thank You! - Patient Eggs{% endblock %}
 
 {% block content %}
-<div class="container" style="text-align: center; padding: 4rem 2rem;">
-    <h1>Thank You for Your Purchase!</h1>
-    <p style="font-size: 1.2rem; margin: 2rem 0;">
-        We appreciate your support of our small homestead farm.
-        Your order will be prepared with care and love.
-    </p>
-    <a href="{{ url_for('shop.index') }}" class="btn">Continue Shopping</a>
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12 text-center mb-4">
+            <h1>Thank You for Your Purchase!</h1>
+            <p class="lead my-4">
+                We appreciate your support of our small homestead farm.
+                Your order will be prepared with care and love.
+            </p>
+        </div>
+        
+        {% if order %}
+        <div class="col-md-8 mx-auto">
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Order Confirmation</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Order ID:</strong> {{ order['order_id'] }}</p>
+                            <p><strong>Order Date:</strong> {{ order['order_date'] }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Name:</strong> {{ order['customer']['name'] }}</p>
+                            <p><strong>Email:</strong> {{ order['customer']['email'] }}</p>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mb-3">Order Items</h5>
+                    {% for item in order['items'] %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                {% if item.get('product_image') %}
+                                <div class="col-md-2">
+                                    <img src="{{ item.get('product_image') }}" alt="{{ item.get('product_name') }}" class="img-fluid rounded">
+                                </div>
+                                <div class="col-md-10">
+                                {% else %}
+                                <div class="col-12">
+                                {% endif %}
+                                    <h5 class="card-title">{{ item.get('product_name') }}</h5>
+                                    <p class="card-text">Price per egg: ${{ "%.2f"|format(item.get('price_per_unit')) }}</p>
+                                    
+                                    <div class="week-selections mt-3">
+                                        <h6>Selected Weeks:</h6>
+                                        <ul class="list-group">
+                                            {% for week_id, quantity in item.get('week_selections', {}).items() %}
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <span>{{ week_id }}</span>
+                                                <span class="badge bg-primary rounded-pill">{{ quantity }} eggs</span>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        <div>
+                                            <p class="mb-0"><strong>Total Quantity:</strong> {{ item.get('total_quantity') }} eggs</p>
+                                            <p class="mb-0"><strong>Total Price:</strong> ${{ "%.2f"|format(item.get('total_price')) }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    <div class="text-end mt-3">
+                        <h4>Order Total: ${{ "%.2f"|format(order['total']) }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="col-12 text-center mt-4">
+            <a href="{{ url_for('shop.index') }}" class="btn btn-primary">Continue Shopping</a>
+        </div>
+    </div>
 </div>
 {% endblock %}
