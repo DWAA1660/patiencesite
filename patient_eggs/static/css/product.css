@@ -1,0 +1,338 @@
+.week-selection-container {
+    margin-bottom: 2rem;
+}
+.date-picker-container {
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+.date-picker-section {
+    margin-bottom: 1.5rem;
+}
+.calendar-container {
+    margin-top: 0.5rem;
+}
+.quantity-section {
+    margin-bottom: 1.5rem;
+}
+.selected-weeks-list {
+    margin-top: 1.5rem;
+}
+.selected-week-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem;
+    background-color: white;
+    border-radius: 6px;
+    margin-bottom: 0.8rem;
+    border-left: 4px solid var(--accent-color);
+}
+.week-info {
+    display: flex;
+    flex-direction: column;
+}
+.week-label {
+    font-weight: bold;
+    color: var(--accent-color);
+}
+.week-availability {
+    font-size: 0.8rem;
+    color: #666;
+}
+.week-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.quantity-control {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    width: 120px;
+}
+.quantity-btn {
+    background-color: #f0f0f0;
+    border: none;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.quantity-btn:hover {
+    background-color: #e0e0e0;
+}
+.quantity-input {
+    width: 60px;
+    border: none;
+    text-align: center;
+    font-size: 0.9rem;
+}
+.remove-week-btn {
+    background-color: #ffebee;
+    color: #b71c1c;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+.remove-week-btn:hover {
+    background-color: #ffcdd2;
+}
+.add-week-btn {
+    background-color: var(--highlight);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    font-weight: 500;
+}
+.add-week-btn:hover {
+    background-color: var(--accent-color);
+}
+.add-week-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+.availability-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    margin-left: 0.5rem;
+}
+.badge-available {
+    background-color: rgba(46, 125, 50, 0.1);
+    color: #2e7d32;
+}
+.badge-low {
+    background-color: rgba(245, 127, 23, 0.1);
+    color: #f57f17;
+}
+.badge-sold {
+    background-color: rgba(183, 28, 28, 0.1);
+    color: #b71c1c;
+}
+.order-summary {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+.summary-header {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: var(--accent-color);
+    font-weight: bold;
+}
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+}
+.summary-total {
+    border-top: 1px solid #eaeaea;
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+    font-weight: bold;
+}
+.empty-selection-message {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+    font-style: italic;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+}
+
+/* Form elements */
+.week-selection-title {
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.week-selection-note {
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.date-picker-label {
+    width: 100%;
+}
+
+.date-picker-label label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.date-picker-input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.quantity-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.week-availability-info {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #666;
+    display: none;
+}
+
+.selected-weeks-title {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+/* Alert styling */
+.alert {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+}
+
+.alert-error {
+    background-color: #ffebee;
+    color: #b71c1c;
+}
+
+.alert-success {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+}
+
+/* Back link arrow */
+.arrow {
+    margin-right: 5px;
+}
+
+/* Product page specific styles */
+.product-back-link {
+    color: var(--accent-color);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 2rem;
+}
+
+.product-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.product-image {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.product-title {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+}
+
+.product-divider {
+    width: 50px;
+    height: 3px;
+    background-color: var(--highlight);
+    margin-bottom: 1.5rem;
+}
+
+.product-description {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+}
+
+.product-price {
+    font-size: 1.6rem;
+    color: var(--accent-color);
+    font-weight: 700;
+    margin-bottom: 2rem;
+}
+
+.product-features {
+    margin-top: 4rem;
+    padding: 2rem;
+    background-color: var(--bg-color);
+    border-radius: 12px;
+}
+
+.features-title {
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.feature-title {
+    color: var(--accent-color);
+    margin-bottom: 0.8rem;
+}
+
+.checkout-btn {
+    padding: 1rem 2.5rem;
+    width: 100%;
+    margin-top: 1.5rem;
+}
+
+/* Flatpickr calendar customization */
+.flatpickr-calendar {
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 320px;
+    margin-top: 0.5rem;
+}
+
+.flatpickr-day.selected {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.flatpickr-day.selected:hover {
+    background-color: var(--highlight);
+    border-color: var(--highlight);
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+    .product-container {
+        grid-template-columns: 1fr;
+    }
+}

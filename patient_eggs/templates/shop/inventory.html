@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Admin - Inventory Management{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">Inventory Management</h1>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Weekly Inventory Status</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Week ID</th>
+                                    <th>Date Range</th>
+                                    <th class="text-center">Total Eggs</th>
+                                    <th class="text-center">Available</th>
+                                    <th class="text-center">Reserved</th>
+                                    <th class="text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for week_id, week_data in inventory.items() %}
+                                    <tr>
+                                        <td>{{ week_id }}</td>
+                                        <td>{{ week_data.label }}</td>
+                                        <td class="text-center">{{ week_data.total }}</td>
+                                        <td class="text-center">{{ week_data.available }}</td>
+                                        <td class="text-center">{{ week_data.reserved }}</td>
+                                        <td class="text-center">
+                                            {% if week_data.available == 0 %}
+                                                <span class="badge bg-danger">Sold Out</span>
+                                            {% elif week_data.available < week_data.total * 0.2 %}
+                                                <span class="badge bg-warning">Low Stock</span>
+                                            {% else %}
+                                                <span class="badge bg-success">Available</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Inventory Management Tips</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Weekly Limits</h5>
+                                    <p class="card-text">Each week has a maximum number of eggs available. This helps ensure you can fulfill all orders without overcommitting.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Customer Distribution</h5>
+                                    <p class="card-text">Customers can distribute their orders across multiple weeks, which helps with managing large orders.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Inventory Updates</h5>
+                                    <p class="card-text">The inventory is automatically updated when customers complete their purchases.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-3">
+                <a href="{{ url_for('shop.view_orders') }}" class="btn btn-outline-primary">View Orders</a>
+                <a href="{{ url_for('shop.index') }}" class="btn btn-outline-secondary">Back to Shop</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

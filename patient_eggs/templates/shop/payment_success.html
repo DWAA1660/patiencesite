@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment Successful - Patience Eggs{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">Payment Successful!</h3>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="fa fa-check-circle text-success" style="font-size: 5rem;"></i>
+                    </div>
+                    
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    
+                    <h4 class="mb-4">Thank you for your order!</h4>
+                    
+                    <p class="mb-4">Your payment has been processed successfully. We've received your order and will begin processing it right away.</p>
+                    
+                    <p class="mb-4">You will receive a confirmation email with your order details shortly.</p>
+                    
+                    <div class="mt-4">
+                        <a href="{{ url_for('shop.index') }}" class="btn btn-primary">Continue Shopping</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
