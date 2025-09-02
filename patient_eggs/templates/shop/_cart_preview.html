@@ -1,0 +1,34 @@
+{# Compact cart preview used in navbar dropdown #}
+{% set items = cart.get('items', []) if cart else [] %}
+<div class="cart-preview">
+  {% if items and items|length > 0 %}
+    <ul class="cart-preview-list">
+      {% for item in items %}
+        <li class="cart-preview-item">
+          <div class="left">
+            {% if item.product_image %}
+              <img src="{{ item.product_image }}" alt="{{ item.product_name }}">
+            {% endif %}
+            <div class="meta">
+              <div class="name">{{ item.product_name }}</div>
+              <div class="qty">{{ item.total_quantity }} eggs</div>
+            </div>
+          </div>
+          <div class="price">${{ '%.2f'|format(item.total_price) }}</div>
+        </li>
+      {% endfor %}
+    </ul>
+    <div class="cart-preview-footer">
+      <div class="total">
+        <span>Total</span>
+        <strong>${{ '%.2f'|format(cart_total) }}</strong>
+      </div>
+      <div class="actions">
+        <a href="{{ url_for('shop.cart') }}" class="btn btn-sm">View Cart</a>
+        <a href="{{ url_for('shop.checkout') }}" class="btn btn-sm primary">Checkout</a>
+      </div>
+    </div>
+  {% else %}
+    <div class="empty">Your cart is empty.</div>
+  {% endif %}
+</div>
