@@ -1,50 +1,62 @@
 products = {
-    'hatching-eggs': {
-        'id': 'hatching-eggs',
-        'name': 'Hatching Eggs',
-        'description': 'Premium hatching eggs from our heritage breed chickens',
+    'chicken-hatching-eggs': {
+        'id': 'chicken-hatching-eggs',
+        'name': 'Heritage Chicken Hatching Eggs',
+        'description': 'Premium hatching eggs from our heritage breed chickens. Perfect for starting your backyard flock.',
         'price': 10.00,
-        'image': 'hatching-eggs.jpg',
+        'image': 'chicken-hatching-eggs.jpg',
         'unit': 'egg',
         'min_quantity': 6,
         'max_quantity': 30,
         'requires_weekly_selection': True,
         'type': 'hatching'
     },
-    'fresh-eggs': {
-        'id': 'fresh-eggs',
-        'name': 'Farm Fresh Eggs',
-        'description': 'Delicious, free-range eggs from our happy hens',
-        'price': 6.00,
-        'image': 'fresh-eggs.jpg',
-        'unit': 'dozen',
-        'type': 'consumable'
-    },
-    'duck-eggs': {
-        'id': 'duck-eggs',
-        'name': 'Duck Eggs',
-        'description': 'Rich and creamy duck eggs, perfect for baking',
-        'price': 8.00,
-        'image': 'duck-eggs.jpg',
-        'unit': 'half-dozen',
-        'type': 'consumable'
-    },
-    'honey': {
-        'id': 'honey',
-        'name': 'Raw Honey',
-        'description': 'Pure, unfiltered honey from our local bees',
+    'duck-hatching-eggs': {
+        'id': 'duck-hatching-eggs',
+        'name': 'Duck Hatching Eggs',
+        'description': 'Farm-fresh duck hatching eggs from our free-range ducks. Great hatch rates!',
         'price': 12.00,
-        'image': 'honey.jpg',
-        'unit': '16 oz jar',
-        'type': 'consumable'
+        'image': 'duck-hatching-eggs.jpg',
+        'unit': 'egg',
+        'min_quantity': 6,
+        'max_quantity': 24,
+        'requires_weekly_selection': True,
+        'type': 'hatching'
     },
-    'jam': {
-        'id': 'jam',
-        'name': 'Homemade Berry Jam',
-        'description': 'Sweet and tangy jam made from seasonal berries',
-        'price': 7.00,
-        'image': 'jam.jpg',
-        'unit': '8 oz jar',
-        'type': 'consumable'
+    'quail-hatching-eggs': {
+        'id': 'quail-hatching-eggs',
+        'name': 'Quail Hatching Eggs',
+        'description': 'Coturnix quail hatching eggs. Quick to hatch and mature - perfect for beginners!',
+        'price': 5.00,
+        'image': 'quail-hatching-eggs.jpg',
+        'unit': 'egg',
+        'min_quantity': 12,
+        'max_quantity': 50,
+        'requires_weekly_selection': True,
+        'type': 'hatching'
+    },
+    'goose-hatching-eggs': {
+        'id': 'goose-hatching-eggs',
+        'name': 'Goose Hatching Eggs',
+        'description': 'Rare heritage goose hatching eggs. Limited seasonal availability.',
+        'price': 15.00,
+        'image': 'goose-hatching-eggs.jpg',
+        'unit': 'egg',
+        'min_quantity': 4,
+        'max_quantity': 12,
+        'requires_weekly_selection': True,
+        'type': 'hatching'
+    },
+    'turkey-hatching-eggs': {
+        'id': 'turkey-hatching-eggs',
+        'name': 'Turkey Hatching Eggs',
+        'description': 'Heritage turkey hatching eggs. Start your own Thanksgiving tradition!',
+        'price': 14.00,
+        'image': 'turkey-hatching-eggs.jpg',
+        'unit': 'egg',
+        'min_quantity': 6,
+        'max_quantity': 18,
+        'requires_weekly_selection': True,
+        'type': 'hatching'
     }
 }

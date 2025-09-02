@@ -6,10 +6,10 @@
 <div class="container my-5">
     <div class="row">
         <div class="col-12 text-center mb-4">
-            <h1>Thank You for Your Purchase!</h1>
+            <h1>Thank You for Your Egg Order!</h1>
             <p class="lead my-4">
-                We appreciate your support of our small homestead farm.
-                Your order will be prepared with care and love.
+                We appreciate your support of our small heritage poultry farm.
+                Your hatching eggs will be carefully selected and prepared for shipment.
             </p>
         </div>
         
@@ -31,14 +31,14 @@
                         </div>
                     </div>
                     
-                    <h5 class="mb-3">Order Items</h5>
+                    <h5 class="mb-3">Your Hatching Eggs</h5>
                     {% for item in order['items'] %}
                     <div class="card mb-3">
                         <div class="card-body">
                             <div class="row">
                                 {% if item.get('product_image') %}
                                 <div class="col-md-2">
-                                    <img src="{{ item.get('product_image') }}" alt="{{ item.get('product_name') }}" class="img-fluid rounded">
+                                    <img src="{{ url_for('static', filename='images/' + item.get('product_image')) }}" alt="{{ item.get('product_name') }}" class="img-fluid rounded">
                                 </div>
                                 <div class="col-md-10">
                                 {% else %}
@@ -48,7 +48,7 @@
                                     <p class="card-text">Price per egg: ${{ "%.2f"|format(item.get('price_per_unit')) }}</p>
                                     
                                     <div class="week-selections mt-3">
-                                        <h6>Selected Weeks:</h6>
+                                        <h6>Delivery Schedule:</h6>
                                         <ul class="list-group">
                                             {% for week_id, quantity in item.get('week_selections', {}).items() %}
                                             <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -76,11 +76,27 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Hatching Tips</h5>
+                </div>
+                <div class="card-body">
+                    <p>For best hatching results:</p>
+                    <ul>
+                        <li>Let eggs rest for 24 hours after delivery before placing in incubator</li>
+                        <li>Maintain proper temperature (99.5°F) and humidity (45-50%) in your incubator</li>
+                        <li>Turn eggs at least 3 times daily until day 18</li>
+                        <li>Stop turning and increase humidity to 65% for the final 3 days before hatching</li>
+                    </ul>
+                    <p>We wish you successful hatches with your new eggs!</p>
+                </div>
+            </div>
         </div>
         {% endif %}
         
         <div class="col-12 text-center mt-4">
-            <a href="{{ url_for('shop.index') }}" class="btn btn-primary">Continue Shopping</a>
+            <a href="{{ url_for('shop.index') }}" class="btn btn-primary">Order More Eggs</a>
         </div>
     </div>
 </div>

@@ -6,385 +6,17 @@
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/product.css') }}">
 <style>
-    /* Product page styling */
-    .product-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 2rem;
-    }
-    
-    .product-details {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 2rem;
-        margin-bottom: 2rem;
-    }
-    
-    .product-image {
-        flex: 1;
-        min-width: 300px;
-        max-width: 500px;
-    }
-    
-    .product-image img {
-        width: 100%;
+    /* Placeholder for any essential base styles if needed, 
+       otherwise product.css should handle most styling. 
+       Ensure product.css exists and contains the necessary styles. */
+    .product-image-container img {
+        max-width: 100%;
         height: auto;
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    
-    .product-info {
-        flex: 1;
-        min-width: 300px;
-    }
-    
-    .product-title {
-        font-size: 2rem;
-        margin-bottom: 1rem;
-        color: #333;
-    }
-    
-    .product-description {
-        font-size: 1rem;
-        line-height: 1.6;
-        margin-bottom: 1rem;
-        color: #555;
-    }
-    
-    .product-price {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-bottom: 1.5rem;
-        color: #2c3e50;
-    }
-    
-    /* Date selection styling */
-    .week-selection-container {
-        background-color: #f9f9f9;
-        border-radius: 8px;
-        padding: 1.5rem;
-        margin-bottom: 2rem;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-    
-    .week-selection-title {
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
-        color: #333;
-    }
-    
-    .week-selection-columns {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 2rem;
-    }
-    
-    .week-selection-column {
-        flex: 1;
-        min-width: 300px;
-    }
-    
-    .date-selection {
-        margin-bottom: 1.5rem;
-    }
-    
-    .date-selection-title {
-        font-size: 1.2rem;
-        margin-bottom: 1rem;
-        color: #333;
-    }
-    
-    .date-input-container {
         margin-bottom: 1rem;
     }
-    
-    .date-input {
-        width: 100%;
-        padding: 0.75rem;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 1rem;
-    }
-    
-    .quantity-selection {
-        margin-bottom: 1.5rem;
-    }
-    
-    .quantity-selection-title {
-        font-size: 1.2rem;
-        margin-bottom: 1rem;
-        color: #333;
-    }
-    
-    .quantity-input-container {
-        display: flex;
-        align-items: center;
-        max-width: 150px;
-    }
-    
-    .quantity-btn {
-        width: 36px;
-        height: 36px;
-        border: 1px solid #ddd;
-        background-color: #f5f5f5;
-        color: #333;
-        font-size: 1.2rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-    }
-    
-    .quantity-btn:hover {
-        background-color: #e9e9e9;
-    }
-    
-    .quantity-input {
-        width: 50px;
-        height: 36px;
-        border: 1px solid #ddd;
-        border-left: none;
-        border-right: none;
-        text-align: center;
-        font-size: 1rem;
-    }
-    
-    .week-availability-info {
-        margin-bottom: 1.5rem;
-        padding: 1rem;
-        border-radius: 4px;
-        background-color: #f0f7ff;
-    }
-    
-    .availability-text {
-        font-size: 1rem;
-        margin-bottom: 0.5rem;
-    }
-    
-    .availability-badge {
-        display: inline-block;
-        padding: 0.25rem 0.75rem;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: bold;
-    }
-    
-    .badge-available {
-        background-color: #e3f7e8;
-        color: #2c7a40;
-    }
-    
-    .add-to-order-btn {
-        background-color: #3498db;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 0.75rem 1.5rem;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: background-color 0.2s;
-    }
-    
-    .add-to-order-btn:hover {
-        background-color: #2980b9;
-    }
-    
-    .add-to-order-btn:disabled {
-        background-color: #ccc;
-        cursor: not-allowed;
-    }
-    
-    /* Selected weeks styling */
-    .selected-weeks {
-        margin-bottom: 1.5rem;
-    }
-    
-    .selected-weeks-title {
-        font-size: 1.2rem;
-        margin-bottom: 1rem;
-        color: #333;
-    }
-    
-    .selected-week-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem;
-        background-color: #f5f5f5;
-        border-radius: 4px;
-        margin-bottom: 0.5rem;
-    }
-    
-    .week-label {
-        font-size: 1rem;
-    }
-    
-    .week-actions {
-        display: flex;
-        align-items: center;
-    }
-    
-    .remove-week-btn {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        background-color: #e74c3c;
-        color: white;
-        border: none;
-        font-size: 1rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-    }
-    
-    .remove-week-btn:hover {
-        background-color: #c0392b;
-    }
-    
-    /* Order summary styling */
-    .order-summary {
-        background-color: #f9f9f9;
-        border-radius: 8px;
-        padding: 1.5rem;
-        margin-bottom: 2rem;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-    
-    .order-summary-title {
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
-        color: #333;
-    }
-    
-    .order-summary-row {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 0.5rem;
-        font-size: 1rem;
-    }
-    
-    .order-summary-total {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 1rem;
-        padding-top: 1rem;
-        border-top: 1px solid #ddd;
-        font-size: 1.2rem;
-        font-weight: bold;
-    }
-    
-    .checkout-btn {
-        display: block;
-        width: 100%;
-        background-color: #27ae60;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 1rem;
-        font-size: 1.2rem;
-        cursor: pointer;
-        transition: background-color 0.2s;
-        margin-top: 1rem;
-    }
-    
-    .checkout-btn:hover {
-        background-color: #219653;
-    }
-    
-    .checkout-btn:disabled {
-        background-color: #ccc;
-        cursor: not-allowed;
-    }
-    
-    #empty-selection {
-        padding: 1rem;
-        background-color: #f5f5f5;
-        border-radius: 4px;
-        text-align: center;
-        color: #777;
-    }
-    
-    .product-details {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .product-meta {
-        margin-top: auto;
-    }
-    
-    .meta-item {
-        margin-bottom: 0.5rem;
-    }
-    
-    .selected-week-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.75rem;
-        border-bottom: 1px solid #e9ecef;
-    }
-    
-    .selected-week-item:last-child {
-        border-bottom: none;
-    }
-    
-    .week-info {
-        flex: 1;
-    }
-    
-    .week-actions {
-        display: flex;
-        align-items: center;
-    }
-    
-    .remove-week-btn {
-        background: none;
-        border: none;
-        color: #dc3545;
-        font-size: 1.5rem;
-        line-height: 1;
-        padding: 0 0.5rem;
-        cursor: pointer;
-    }
-    
-    .availability-badge {
-        display: inline-block;
-        padding: 0.25rem 0.5rem;
-        border-radius: 0.25rem;
-        font-size: 0.875rem;
-        font-weight: 700;
-    }
-    
-    .badge-available {
-        background-color: #2e7d32;
-        color: white;
-    }
-    
-    .badge-low-stock {
-        background-color: #f57f17;
-        color: white;
-    }
-    
-    .badge-sold-out {
-        background-color: #b71c1c;
-        color: white;
-    }
-    
-    .order-summary {
-        border-top: 1px solid #e9ecef;
-        padding-top: 1rem;
-        font-weight: 500;
-    }
-    
-    .cart-indicator {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 1000;
-    }
+    /* Add any other minimal base styles here if required */
 </style>
 {% endblock %}
 
@@ -394,108 +26,120 @@
         <div class="col-lg-6">
             <div class="product-image-container">
                 {% if product.image %}
-                <img src="{{ product.image }}" alt="{{ product.name }}" class="img-fluid rounded">
+                <img src="{{ url_for('static', filename='images/' + product.image) }}" alt="{{ product.name }}" class="img-fluid rounded">
                 {% else %}
-                <div class="placeholder-image bg-light d-flex align-items-center justify-content-center rounded" style="height: 400px;">
-                    <span class="text-muted">No image available</span>
-                </div>
+                <img src="{{ url_for('static', filename='images/default-egg.jpg') }}" alt="{{ product.name }}" class="img-fluid rounded">
                 {% endif %}
             </div>
         </div>
         <div class="col-lg-6">
-            <div class="product-details">
-                <h1 class="product-title mb-3">{{ product.name }}</h1>
-                <p class="product-price mb-4">${{ "%.2f"|format(product.price) }} per egg</p>
+            <div class="product-info">
+                <h1 class="product-title mb-2">{{ product.name }}</h1>
+                <p class="product-price mb-3">${{ "%.2f"|format(product.price) }} per egg</p>
                 
-                <div class="product-description mb-4">
-                    {{ product.description }}
-                </div>
-                
-                <div class="product-meta mb-4">
-                    <div class="meta-item">
-                        <strong>Minimum Order:</strong> {{ product.min_quantity }} eggs
-                    </div>
-                    <div class="meta-item">
-                        <strong>Maximum Order:</strong> {{ product.max_quantity }} eggs
-                    </div>
-                </div>
-                
-                {% if product.requires_weekly_selection %}
+                {% if product.description %}
+                    <p class="product-description mb-4">{{ product.description }}</p>
+                {% endif %}
+
+                <!-- Restore Weekly Selection Form -->
                 <form id="product-form" action="{{ url_for('shop.add_to_cart') }}" method="post">
                     <input type="hidden" name="product_id" value="{{ product.id }}">
-                    <div id="week-selections-inputs"></div>
-                    
-                    <div class="card mb-4">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0">1. Choose Delivery Date</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label for="date-input" class="form-label">Select a delivery date:</label>
-                                <input type="date" id="date-input" class="form-control">
-                                <input type="hidden" id="selected-week-id" value="">
-                                <div class="form-text">Choose a date for egg delivery (up to 1 year in advance)</div>
-                            </div>
-                            
-                            <div id="week-availability-info" style="display: none;" class="mt-3 p-3 border rounded">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <span id="availability-text">Available for delivery</span>
+                    <div id="week-selections-inputs"></div> {# Hidden inputs for selected weeks go here #}
+
+                    {% if product.requires_weekly_selection and available_weeks %}
+                        <div class="week-selection-container card mb-4">
+                            <div class="card-body">
+                                <h3 class="week-selection-title card-title">Select Shipping Week(s)</h3>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6 date-selection mb-3 mb-md-0">
+                                        <label for="delivery-week" class="form-label">Available Weeks:</label>
+                                        <select id="delivery-week" class="form-select">
+                                            <option value="">-- Select a week --</option>
+                                            {% for week in available_weeks %}
+                                                <option value="{{ week.id }}" data-available="{{ week.available }}">
+                                                    {{ week.label }} ({{ week.available }} eggs available)
+                                                </option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
-                                    <div>
-                                        <span id="availability-badge" class="availability-badge badge-available">Available</span>
+                                    <div class="col-md-6 quantity-selection">
+                                        <label for="week-quantity" class="form-label">Quantity for selected week:</label>
+                                        <div class="quantity-input-container input-group">
+                                            <button type="button" class="quantity-btn btn btn-outline-secondary" onclick="changeWeekQuantity(-1)">-</button>
+                                            <input type="number" id="week-quantity" class="quantity-input form-control text-center" 
+                                                   value="{{ product.min_quantity | default(1) }}" 
+                                                   min="{{ product.min_quantity | default(1) }}" 
+                                                   max="{{ product.max_quantity | default(100) }}">
+                                            <button type="button" class="quantity-btn btn btn-outline-secondary" onclick="changeWeekQuantity(1)">+</button>
+                                        </div>
+                                        <small class="text-muted">Min: {{ product.min_quantity | default(1) }}</small>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="card mb-4">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0">2. Select Quantity</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="quantity-selector d-flex align-items-center">
-                                <button type="button" id="decrease-qty" class="btn btn-outline-secondary">-</button>
-                                <input type="number" id="quantity-input" name="quantity" value="6" min="1" max="30" class="form-control mx-2" style="width: 80px;">
-                                <button type="button" id="increase-qty" class="btn btn-outline-secondary">+</button>
-                                <span class="ms-2">eggs</span>
-                            </div>
-                            
-                            <div class="mt-3">
-                                <button type="button" id="add-to-order-btn" class="btn btn-success" disabled>Add to Order</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="card mb-4">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0">3. Your Selections</h5>
-                        </div>
-                        <div class="card-body">
-                            <div id="selected-weeks-container">
-                                <div id="empty-selection">No dates selected yet</div>
-                            </div>
-                            
-                            <div class="order-summary mt-4">
-                                <div class="d-flex justify-content-between">
-                                    <span>Total Eggs:</span>
-                                    <span id="total-eggs">0</span>
+
+                                <div id="week-availability-info" class="alert alert-info mb-3" style="display: none;">
+                                    <span id="availability-text"></span> 
+                                    <span id="availability-badge" class="badge"></span>
                                 </div>
-                                <div class="d-flex justify-content-between">
-                                    <span>Total Price:</span>
-                                    <span id="total-price">$0.00</span>
-                                </div>
+
+                                <button type="button" id="add-week-btn" class="btn btn-secondary add-to-order-btn" disabled>
+                                    Add Week Selection
+                                </button>
                             </div>
                         </div>
-                        <div class="card-footer">
-                            <button type="submit" id="checkoutBtn" class="btn btn-primary btn-lg w-100" disabled>Add to Cart</button>
+
+                        <div id="selected-weeks-container" class="selected-weeks card mb-4" style="display: none;">
+                            <div class="card-body">
+                                <h4 class="selected-weeks-title card-title">Your Selections for {{ product.name }}</h4>
+                                <ul id="selected-weeks-list" class="selected-weeks-list list-group list-group-flush"></ul>
+                            </div>
                         </div>
+
+                        <div id="order-summary" class="order-summary card mb-4" style="display: none;">
+                            <div class="card-body">
+                                <h4 class="order-summary-title card-title">Order Summary</h4>
+                                <div class="order-summary-details">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="order-summary-label">Total Eggs Selected:</span>
+                                        <span id="total-eggs" class="order-summary-value">0</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between order-summary-total pt-2 border-top">
+                                        <span class="order-summary-label fw-bold">Total Price:</span>
+                                        <span id="total-price" class="order-summary-value fw-bold">$0.00</span>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 mt-3" disabled>
+                                    Add Selections to Cart
+                                </button>
+                            </div>
+                        </div>
+
+                    {% else %}
+                        {# Fallback for products NOT requiring weekly selection #}
+                        <div class="quantity-selector mb-4">
+                            <label for="quantity" class="form-label">Quantity:</label>
+                            <div class="quantity-input-group input-group">
+                                <button type="button" class="quantity-btn btn btn-outline-secondary" onclick="decreaseSimpleQuantity()">-</button>
+                                <input type="number" id="quantity" name="quantity" class="quantity-input form-control text-center"
+                                       value="{{ product.min_quantity | default(1) }}" 
+                                       min="{{ product.min_quantity | default(1) }}" 
+                                       max="{{ product.max_quantity | default(100) }}" 
+                                       required>
+                                <button type="button" class="quantity-btn btn btn-outline-secondary" onclick="increaseSimpleQuantity()">+</button>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg add-to-cart-btn">
+                            Add to Cart
+                        </button>
+                    {% endif %}
+                </form> <!-- End of main product form -->
+
+                {% if product.hatch_rate_info %}
+                <div class="card mt-4 bg-light border-0">
+                    <div class="card-body">
+                        <h5 class="card-title">Hatch Rate Information</h5>
+                        <p class="card-text small text-muted">{{ product.hatch_rate_info }}</p>
                     </div>
-                </form>
-                {% else %}
-                <div class="alert alert-info">
-                    This product does not require weekly selection.
                 </div>
                 {% endif %}
             </div>
@@ -503,394 +147,296 @@
     </div>
 </div>
 
-<!-- Cart indicator -->
-<div class="cart-indicator">
-    <a href="{{ url_for('shop.cart') }}" class="btn btn-primary position-relative">
-        <i class="bi bi-cart"></i> Cart
-        {% if cart_count > 0 %}
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            {{ cart_count }}
-        </span>
-        {% endif %}
-    </a>
-</div>
-{% endblock %}
-
-{% block scripts %}
-{% if product.requires_weekly_selection %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Store product price data
-        const pricePerEgg = parseFloat('{{ product.price }}');
-        const minQuantity = parseInt('{{ product.min_quantity }}');
-        const maxQuantity = parseInt('{{ product.max_quantity }}');
-        
-        // DOM elements
-        const dateInput = document.getElementById('date-input');
-        const selectedWeekId = document.getElementById('selected-week-id');
-        const quantityInput = document.getElementById('quantity-input');
-        const decreaseQtyBtn = document.getElementById('decrease-qty');
-        const increaseQtyBtn = document.getElementById('increase-qty');
-        const addToOrderBtn = document.getElementById('add-to-order-btn');
-        const selectedWeeksContainer = document.getElementById('selected-weeks-container');
-        const weekAvailabilityInfo = document.getElementById('week-availability-info');
+        const deliveryWeekSelect = document.getElementById('delivery-week');
+        const weekQuantityInput = document.getElementById('week-quantity');
+        const addWeekBtn = document.getElementById('add-week-btn');
+        const availabilityInfo = document.getElementById('week-availability-info');
         const availabilityText = document.getElementById('availability-text');
         const availabilityBadge = document.getElementById('availability-badge');
+        
+        const selectedWeeksContainer = document.getElementById('selected-weeks-container');
+        const selectedWeeksList = document.getElementById('selected-weeks-list');
+        const orderSummary = document.getElementById('order-summary');
         const totalEggsElement = document.getElementById('total-eggs');
         const totalPriceElement = document.getElementById('total-price');
-        const checkoutBtn = document.getElementById('checkoutBtn');
         const weekSelectionsInputs = document.getElementById('week-selections-inputs');
-        const productForm = document.getElementById('product-form');
+        const finalSubmitBtn = orderSummary.querySelector('button[type="submit"]');
+
+        const productPrice = parseFloat(document.querySelector('meta[name="product-price"]').content);
+        const minQuantityPerWeek = parseInt(weekQuantityInput.min);
+        const maxQuantityPerWeek = parseInt(weekQuantityInput.max); // Max per individual week selection
         
-        // Set min date to today and max date to 1 year from now
-        const today = new Date();
-        const maxDate = new Date();
-        maxDate.setFullYear(today.getFullYear() + 1);
-        
-        dateInput.min = formatDate(today);
-        dateInput.max = formatDate(maxDate);
-        
-        // Store selected weeks
-        const selectedWeeks = [];
-        
-        // Helper function to format date as YYYY-MM-DD
-        function formatDate(date) {
-            const d = new Date(date);
-            let month = '' + (d.getMonth() + 1);
-            let day = '' + d.getDate();
-            const year = d.getFullYear();
+        let selectedWeeks = {}; // { weekId: { quantity: x, label: 'Week ending...' } }
+        let currentMaxAvailableForWeek = 0;
+
+        // --- Event Listeners ---
+        deliveryWeekSelect.addEventListener('change', handleWeekChange);
+        weekQuantityInput.addEventListener('input', handleQuantityChange);
+        addWeekBtn.addEventListener('click', addSelectedWeek);
+
+        // --- Functions ---
+        function handleWeekChange() {
+            const selectedOption = deliveryWeekSelect.options[deliveryWeekSelect.selectedIndex];
+            const weekId = selectedOption.value;
             
-            if (month.length < 2) month = '0' + month;
-            if (day.length < 2) day = '0' + day;
-            
-            return [year, month, day].join('-');
-        }
-        
-        // Helper function to get week number
-        function getWeekNumber(d) {
-            // Copy date so don't modify original
-            d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-            // Set to nearest Thursday: current date + 4 - current day number
-            // Make Sunday's day number 7
-            d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-            // Get first day of year
-            const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-            // Calculate full weeks to nearest Thursday
-            const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-            // Return array of year and week number
-            return [d.getUTCFullYear(), weekNo];
-        }
-        
-        // Helper function to get week ID from date
-        function getWeekId(dateStr) {
-            const date = new Date(dateStr);
-            const weekNumber = getWeekNumber(date);
-            return `${weekNumber[0]}-${weekNumber[1].toString().padStart(2, '0')}`;
-        }
-        
-        // Helper function to get week start and end dates
-        function getWeekDates(dateStr) {
-            const date = new Date(dateStr);
-            const day = date.getDay();
-            const diff = date.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
-            
-            const monday = new Date(date);
-            monday.setDate(diff);
-            
-            const sunday = new Date(monday);
-            sunday.setDate(monday.getDate() + 6);
-            
-            return {
-                start: formatDate(monday),
-                end: formatDate(sunday)
-            };
-        }
-        
-        // Helper function to format date for display
-        function formatDisplayDate(dateStr) {
-            const date = new Date(dateStr);
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return date.toLocaleDateString('en-US', options);
-        }
-        
-        // Helper function to format week for display
-        function formatWeekDisplay(dateStr) {
-            const weekDates = getWeekDates(dateStr);
-            return `Week of ${formatDisplayDate(weekDates.start)}`;
-        }
-        
-        // Date input change handler
-        dateInput.addEventListener('change', function() {
-            const selectedDate = this.value;
-            
-            if (selectedDate) {
-                const weekId = getWeekId(selectedDate);
-                selectedWeekId.value = weekId;
-                
-                // Update availability info
-                updateAvailabilityInfo({
-                    id: weekId,
-                    date: selectedDate,
-                    label: formatWeekDisplay(selectedDate),
-                    available: 30, // Default availability
-                    total: 30,
-                    status: 'available',
-                    status_text: 'Available'
-                });
-                
-                validateAddToOrder();
+            if (weekId) {
+                currentMaxAvailableForWeek = parseInt(selectedOption.dataset.available);
+                availabilityInfo.style.display = 'block';
+                updateAvailabilityDisplay();
+                validateSelection();
             } else {
-                selectedWeekId.value = '';
-                weekAvailabilityInfo.style.display = 'none';
-                addToOrderBtn.disabled = true;
-            }
-        });
-        
-        // Update availability information for selected week
-        function updateAvailabilityInfo(week) {
-            if (week) {
-                weekAvailabilityInfo.style.display = 'block';
-                
-                // Update availability text and badge
-                availabilityText.textContent = "Available for delivery";
-                
-                // Set max quantity to default max
-                quantityInput.max = 30;
-                if (parseInt(quantityInput.value) > 30) {
-                    quantityInput.value = 30;
-                }
-                
-                // Update badge
-                availabilityBadge.textContent = 'Available';
-                availabilityBadge.className = 'availability-badge badge-available';
-                
-                // Enable add to order button
-                addToOrderBtn.disabled = false;
-            } else {
-                weekAvailabilityInfo.style.display = 'none';
-                addToOrderBtn.disabled = true;
+                availabilityInfo.style.display = 'none';
+                currentMaxAvailableForWeek = 0;
+                addWeekBtn.disabled = true;
             }
         }
+
+        function handleQuantityChange() {
+            validateSelection();
+        }
         
-        // Validate if Add to Order button should be enabled
-        function validateAddToOrder() {
-            const weekId = selectedWeekId.value;
-            const quantity = parseInt(quantityInput.value);
+        window.changeWeekQuantity = function(amount) {
+            let currentValue = parseInt(weekQuantityInput.value);
+            let newValue = currentValue + amount;
+            // Clamp value between min and max allowed for the input itself
+            newValue = Math.max(minQuantityPerWeek, Math.min(maxQuantityPerWeek, newValue));
+            weekQuantityInput.value = newValue;
+            handleQuantityChange(); // Trigger validation
+        }
+
+        function validateSelection() {
+            const weekId = deliveryWeekSelect.value;
+            const quantity = parseInt(weekQuantityInput.value);
             
-            if (!weekId) {
-                addToOrderBtn.disabled = true;
+            if (!weekId || isNaN(quantity)) {
+                addWeekBtn.disabled = true;
                 return;
             }
+
+            const alreadySelectedQuantity = selectedWeeks[weekId] ? selectedWeeks[weekId].quantity : 0;
+            const availableForSelection = currentMaxAvailableForWeek; // Already considers previously selected amounts for *other* weeks
             
-            // Check if week is already selected
-            const alreadySelected = selectedWeeks.some(function(w) { 
-                return w.id === weekId; 
-            });
+            // Check basic quantity rules
+            if (quantity < minQuantityPerWeek || quantity > maxQuantityPerWeek) {
+                 weekQuantityInput.classList.add('is-invalid');
+                 addWeekBtn.disabled = true;
+                 return;
+            } else {
+                 weekQuantityInput.classList.remove('is-invalid');
+            }
             
-            // Check if quantity is valid
-            const validQuantity = quantity > 0 && quantity <= 30;
+            // Check availability for the selected week
+            if (quantity > availableForSelection) {
+                addWeekBtn.disabled = true;
+                // Optionally show a more specific message in availabilityInfo
+            } else {
+                addWeekBtn.disabled = false;
+            }
+        }
+
+        function updateAvailabilityDisplay() {
+            const selectedOption = deliveryWeekSelect.options[deliveryWeekSelect.selectedIndex];
+            const weekId = selectedOption.value;
+            if (!weekId) return;
+
+            const available = currentMaxAvailableForWeek; 
+            availabilityText.textContent = `Available for ${selectedOption.text.split(' (')[0]}: ${available} eggs.`;
             
-            // Enable/disable Add to Order button
-            addToOrderBtn.disabled = alreadySelected || !validQuantity;
+            if (available >= minQuantityPerWeek) {
+                availabilityBadge.textContent = 'Available';
+                availabilityBadge.className = 'badge bg-success';
+            } else {
+                availabilityBadge.textContent = 'Unavailable';
+                availabilityBadge.className = 'badge bg-danger';
+            }
         }
         
-        // Add event listeners for quantity controls
-        decreaseQtyBtn.addEventListener('click', function() {
-            const currentValue = parseInt(quantityInput.value);
-            if (currentValue > 1) {
-                quantityInput.value = currentValue - 1;
-                validateAddToOrder();
+        function addSelectedWeek() {
+            const weekId = deliveryWeekSelect.value;
+            const quantity = parseInt(weekQuantityInput.value);
+            const selectedOption = deliveryWeekSelect.options[deliveryWeekSelect.selectedIndex];
+            const weekLabel = selectedOption.text.split(' (')[0]; // Get clean label
+            const availableBeforeAdd = parseInt(selectedOption.dataset.available);
+
+            if (!weekId || isNaN(quantity) || quantity < minQuantityPerWeek || quantity > availableBeforeAdd) {
+                // Should not happen if button is enabled correctly, but double check
+                return; 
             }
-        });
-        
-        increaseQtyBtn.addEventListener('click', function() {
-            const currentValue = parseInt(quantityInput.value);
-            if (currentValue < 30) {
-                quantityInput.value = currentValue + 1;
-            }
-            validateAddToOrder();
-        });
-        
-        quantityInput.addEventListener('change', function() {
-            const currentValue = parseInt(quantityInput.value);
-            
-            if (isNaN(currentValue) || currentValue < 1) {
-                quantityInput.value = 1;
-            } else if (currentValue > 30) {
-                quantityInput.value = 30;
-            }
-            validateAddToOrder();
-        });
-        
-        // Add to Order button click handler
-        addToOrderBtn.addEventListener('click', function() {
-            const weekId = selectedWeekId.value;
-            const quantity = parseInt(quantityInput.value);
-            const selectedDate = dateInput.value;
-            
-            if (weekId && quantity > 0) {
-                // Add to selected weeks
-                selectedWeeks.push({
-                    id: weekId,
-                    date: selectedDate,
-                    label: formatWeekDisplay(selectedDate),
-                    quantity: quantity
-                });
-                
-                // Update UI
-                updateSelectedWeeksList();
-                updateOrderSummary();
-                
-                // Reset selection
-                dateInput.value = '';
-                selectedWeekId.value = '';
-                quantityInput.value = 6;
-                weekAvailabilityInfo.style.display = 'none';
-                addToOrderBtn.disabled = true;
-            }
-        });
-        
-        // Update the selected weeks list in the UI
-        function updateSelectedWeeksList() {
-            // Clear current list
-            selectedWeeksContainer.innerHTML = '';
-            
-            // Add empty selection message if needed
-            if (selectedWeeks.length === 0) {
-                const emptyMsg = document.createElement('div');
-                emptyMsg.id = 'empty-selection';
-                emptyMsg.textContent = 'No dates selected yet';
-                emptyMsg.style.padding = '1rem';
-                emptyMsg.style.backgroundColor = '#f5f5f5';
-                emptyMsg.style.borderRadius = '4px';
-                emptyMsg.style.textAlign = 'center';
-                emptyMsg.style.color = '#777';
-                selectedWeeksContainer.appendChild(emptyMsg);
+
+            // Update selectedWeeks object
+            if (selectedWeeks[weekId]) {
+                // If week already selected, update quantity (we'll adjust availability later)
+                selectedWeeks[weekId].quantity = quantity;
             } else {
-                // Add each selected week to the list
-                selectedWeeks.forEach(function(week, index) {
-                    const weekItem = document.createElement('div');
-                    weekItem.className = 'selected-week-item';
-                    
-                    const weekInfo = document.createElement('div');
-                    weekInfo.className = 'week-info';
-                    
-                    const weekLabel = document.createElement('span');
-                    weekLabel.className = 'week-label';
-                    weekLabel.textContent = week.label;
-                    
-                    weekInfo.appendChild(weekLabel);
-                    
-                    const weekActions = document.createElement('div');
-                    weekActions.className = 'week-actions';
-                    
-                    const quantityDisplay = document.createElement('span');
-                    quantityDisplay.style.marginRight = '1rem';
-                    quantityDisplay.style.fontWeight = 'bold';
-                    quantityDisplay.textContent = week.quantity + " eggs";
-                    
-                    const removeBtn = document.createElement('button');
-                    removeBtn.type = 'button';
-                    removeBtn.className = 'remove-week-btn';
-                    removeBtn.textContent = '×';
-                    removeBtn.setAttribute('data-index', index);
-                    removeBtn.onclick = function() {
-                        // Remove the week at this index
-                        selectedWeeks.splice(index, 1);
-                        // Update UI
-                        updateSelectedWeeksList();
-                        updateOrderSummary();
-                    };
-                    
-                    weekActions.appendChild(quantityDisplay);
-                    weekActions.appendChild(removeBtn);
-                    
-                    weekItem.appendChild(weekInfo);
-                    weekItem.appendChild(weekActions);
-                    
-                    selectedWeeksContainer.appendChild(weekItem);
-                });
+                selectedWeeks[weekId] = { quantity: quantity, label: weekLabel };
+            }
+
+            // Update availability in dropdown
+            const newAvailable = availableBeforeAdd - quantity;
+            selectedOption.dataset.available = newAvailable;
+            selectedOption.text = `${weekLabel} (${newAvailable} eggs available)`;
+            currentMaxAvailableForWeek = newAvailable; // Update current context
+
+            // Update UI
+            updateSelectedWeeksList();
+            updateOrderSummary();
+            updateHiddenInputs();
+
+            // Reset selection controls
+            deliveryWeekSelect.value = '';
+            weekQuantityInput.value = minQuantityPerWeek;
+            availabilityInfo.style.display = 'none';
+            addWeekBtn.disabled = true;
+        }
+
+        function updateSelectedWeeksList() {
+            selectedWeeksList.innerHTML = ''; // Clear current list
+            const weekIds = Object.keys(selectedWeeks);
+            
+            if (weekIds.length === 0) {
+                selectedWeeksContainer.style.display = 'none';
+                orderSummary.style.display = 'none';
+                return;
+            }
+
+            selectedWeeksContainer.style.display = 'block';
+            orderSummary.style.display = 'block';
+
+            for (const weekId of weekIds) {
+                const week = selectedWeeks[weekId];
+                const li = document.createElement('li');
+                li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                
+                const weekText = document.createElement('span');
+                weekText.textContent = `${week.label}: `; 
+                
+                const quantityBadge = document.createElement('span');
+                quantityBadge.className = 'badge bg-primary rounded-pill me-2';
+                quantityBadge.textContent = `${week.quantity} eggs`;
+
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.className = 'btn btn-sm btn-outline-danger';
+                removeBtn.innerHTML = '&times;'; // Cross icon
+                removeBtn.onclick = () => removeWeekSelection(weekId);
+
+                const actionDiv = document.createElement('div');
+                actionDiv.className = 'd-flex align-items-center';
+                actionDiv.appendChild(quantityBadge);
+                actionDiv.appendChild(removeBtn);
+
+                li.appendChild(weekText);
+                li.appendChild(actionDiv);
+                selectedWeeksList.appendChild(li);
+            }
+        }
+        
+        function removeWeekSelection(weekIdToRemove) {
+            if (!selectedWeeks[weekIdToRemove]) return;
+
+            const removedQuantity = selectedWeeks[weekIdToRemove].quantity;
+            delete selectedWeeks[weekIdToRemove];
+
+            // Restore availability in dropdown
+            for (let i = 0; i < deliveryWeekSelect.options.length; i++) {
+                const option = deliveryWeekSelect.options[i];
+                if (option.value === weekIdToRemove) {
+                    const currentAvailable = parseInt(option.dataset.available);
+                    const newAvailable = currentAvailable + removedQuantity;
+                    const weekLabel = option.text.split(' (')[0];
+                    option.dataset.available = newAvailable;
+                    option.text = `${weekLabel} (${newAvailable} eggs available)`;
+                    // If this week is currently selected in dropdown, update context
+                    if (deliveryWeekSelect.value === weekIdToRemove) {
+                        currentMaxAvailableForWeek = newAvailable;
+                        handleWeekChange(); // Re-validate controls
+                    }
+                    break;
+                }
             }
             
-            // Update hidden inputs for form submission
+            // Update UI
+            updateSelectedWeeksList();
+            updateOrderSummary();
             updateHiddenInputs();
         }
-        
-        // Update order summary
+
         function updateOrderSummary() {
-            let totalEggs = 0;
-            
-            selectedWeeks.forEach(function(week) {
-                totalEggs += week.quantity;
-            });
-            
-            const totalPrice = (totalEggs * pricePerEgg).toFixed(2);
+            const totalEggs = calculateTotalEggs();
+            const totalPrice = totalEggs * productPrice;
             
             totalEggsElement.textContent = totalEggs;
             totalPriceElement.textContent = formatCurrency(totalPrice);
             
-            // Enable/disable checkout button
-            checkoutBtn.disabled = totalEggs < minQuantity || totalEggs > maxQuantity;
+            finalSubmitBtn.disabled = totalEggs === 0;
         }
-        
-        // Update hidden inputs for form submission
+
         function updateHiddenInputs() {
-            // Clear existing week inputs
-            const weekInputs = document.querySelectorAll('input[name^="week-"]');
-            weekInputs.forEach(input => input.remove());
-            
-            // Add new week inputs
-            selectedWeeks.forEach(weekData => {
+            weekSelectionsInputs.innerHTML = ''; // Clear previous
+            for (const weekId in selectedWeeks) {
                 const input = document.createElement('input');
                 input.type = 'hidden';
-                input.name = weekData.id; // Week ID is already in the correct format
-                input.value = weekData.quantity;
-                productForm.appendChild(input);
-            });
-            
-            // Update total
-            document.getElementById('total-eggs').textContent = calculateTotalEggs();
-            document.getElementById('total-price').textContent = '$' + calculateTotalPrice().toFixed(2);
+                input.name = weekId; // Set name directly to the week ID (e.g., '2025-12')
+                input.value = selectedWeeks[weekId].quantity;
+                weekSelectionsInputs.appendChild(input);
+            }
         }
-        
-        // Helper function to format currency
-        function formatCurrency(amount) {
-            return `$${parseFloat(amount).toFixed(2)}`;
-        }
-        
-        // Helper function to calculate total eggs
-        function calculateTotalEggs() {
-            let total = 0;
-            selectedWeeks.forEach(week => total += week.quantity);
-            return total;
-        }
-        
-        // Helper function to calculate total price
-        function calculateTotalPrice() {
-            let total = 0;
-            selectedWeeks.forEach(week => total += week.quantity * pricePerEgg);
-            return total;
-        }
-    });
-</script>
 
+        function calculateTotalEggs() {
+            return Object.values(selectedWeeks).reduce((sum, week) => sum + week.quantity, 0);
+        }
+
+        function formatCurrency(amount) {
+            return '$' + amount.toFixed(2);
+        }
+        
+        // Initial setup if needed
+        handleWeekChange(); // Set initial state based on dropdown
+    });
+    </script>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+{# Ensure product metadata is available for JavaScript #}
+<meta name="product-price" content="{{ product.price }}">
+<meta name="min-quantity" content="{{ product.min_quantity | default(1) }}">
+<meta name="max-quantity" content="{{ product.max_quantity | default(100) }}">
+
+{% if not product.requires_weekly_selection or not available_weeks %}
+{# Script for non-weekly selection products #}
 <script>
-    // For non-weekly selection products
-    function increaseQuantity() {
-        const quantityInput = document.getElementById('quantity');
-        const currentValue = parseInt(quantityInput.value);
-        if (currentValue < 99) {
+    // Basic quantity control functions
+    const quantityInput = document.getElementById('quantity');
+    const minQuantity = parseInt(quantityInput.min);
+    const maxQuantity = parseInt(quantityInput.max);
+
+    function increaseSimpleQuantity() {
+        let currentValue = parseInt(quantityInput.value);
+        if (currentValue < maxQuantity) {
             quantityInput.value = currentValue + 1;
         }
     }
-    
-    function decreaseQuantity() {
-        const quantityInput = document.getElementById('quantity');
-        const currentValue = parseInt(quantityInput.value);
-        if (currentValue > 1) {
+
+    function decreaseSimpleQuantity() {
+        let currentValue = parseInt(quantityInput.value);
+        if (currentValue > minQuantity) {
             quantityInput.value = currentValue - 1;
         }
     }
+    
+    quantityInput?.addEventListener('change', function() { // Add safe navigation ?. 
+        let value = parseInt(this.value);
+        if (isNaN(value) || value < minQuantity) {
+            this.value = minQuantity;
+        } else if (value > maxQuantity) {
+            this.value = maxQuantity;
+        }
+    });
 </script>
 {% endif %}
 {% endblock %}

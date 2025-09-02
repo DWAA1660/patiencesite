@@ -3,6 +3,7 @@ from config import Config
 import datetime
 from flask_session import Session
 from patient_eggs.shop.database import db
+from patient_eggs.shop.cart import Cart
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -36,4 +37,22 @@ def create_app(config_class=Config):
     def inject_now():
         return {'now': datetime.datetime.now()}
     
+    @app.context_processor
+    def inject_cart_summary():
+        try:
+            cart_data = Cart.get_cart()
+            total_items = len(cart_data.get('items', []))
+            total_price = sum(item.get('total_price', 0) for item in cart_data.get('items', []))
+            return {
+                'cart_summary': {
+                    'total_items': total_items,
+                    'total_price': total_price,
+                    'items': cart_data.get('items', [])
+                }
+            }
+        except Exception:
+            # Fail-safe so templates don't break if cart access errors out
+            return {'cart_summary': {'total_items': 0, 'total_price': 0, 'items': []}}
+    
     return app
+

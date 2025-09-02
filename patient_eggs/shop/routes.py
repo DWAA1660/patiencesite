@@ -50,6 +50,27 @@ def product(product_id):
     
     return render_template('shop/product.html', product=product, available_weeks=available_weeks, cart_count=cart_count)
 
+@bp.route('/cart-preview')
+def cart_preview():
+    """Render a compact cart preview for the navbar dropdown."""
+    try:
+        cart_data = Cart.get_cart()
+        cart_total = Cart.get_cart_total()
+        # week labels for display
+        available_weeks = inventory_manager.get_available_weeks()
+        week_labels = {week['id']: week['label'] for week in available_weeks}
+        return render_template('shop/_cart_preview.html',
+                               cart=cart_data,
+                               cart_total=cart_total,
+                               week_labels=week_labels)
+    except Exception as e:
+        current_app.logger.error(f"Error rendering cart preview: {str(e)}")
+        # Render empty preview to avoid breaking navbar
+        return render_template('shop/_cart_preview.html',
+                               cart={'items': []},
+                               cart_total=0,
+                               week_labels={})
+
 @bp.route('/check-availability', methods=['POST'])
 def check_week_availability():
     """API endpoint to check availability for a specific week and quantity."""

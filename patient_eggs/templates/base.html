@@ -78,6 +78,66 @@
         .navbar a:hover:after {
             width: 100%;
         }
+
+        /* Cart badge style */
+        .cart-badge {
+            background-color: var(--highlight);
+            color: var(--primary-color);
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 5px;
+            vertical-align: super;
+        }
+
+        /* Cart dropdown styles */
+        .cart-menu {
+            position: relative;
+        }
+        .cart-button {
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+        .cart-icon {
+            width: 22px;
+            height: 22px;
+            display: inline-block;
+        }
+        .cart-dropdown {
+            position: absolute;
+            right: 0;
+            top: 120%;
+            width: 320px;
+            background: #fff;
+            color: var(--text-color);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            padding: 12px;
+            display: none;
+            z-index: 1000;
+        }
+        .cart-dropdown.open { display: block; }
+        .cart-preview-list { list-style: none; margin: 0; padding: 0; max-height: 300px; overflow: auto; }
+        .cart-preview-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 6px; border-bottom: 1px solid rgba(0,0,0,0.06); }
+        .cart-preview-item:last-child { border-bottom: none; }
+        .cart-preview-item img { width: 42px; height: 42px; object-fit: cover; border-radius: 6px; margin-right: 10px; }
+        .cart-preview-item .left { display: flex; align-items: center; }
+        .cart-preview-item .meta .name { font-size: 0.95rem; }
+        .cart-preview-item .meta .qty { font-size: 0.8rem; color: #666; }
+        .cart-preview .empty { padding: 20px; text-align: center; color: #666; font-size: 0.95rem; }
+        .cart-preview-footer { padding-top: 10px; }
+        .cart-preview-footer .total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .cart-preview-footer .actions { display: flex; gap: 8px; }
+        .cart-preview-footer .btn { padding: 8px 12px; border-radius: 6px; text-decoration: none; background: var(--primary-color); color: #fff; font-size: 0.9rem; }
+        .cart-preview-footer .btn.primary { background: var(--accent-color); }
         
         .container {
             max-width: 1200px;
@@ -237,6 +297,22 @@
                 <a href="#">About Us</a>
                 <a href="#">Contact</a>
             </div>
+            <div class="cart-menu">
+                <button id="cartButton" class="cart-button" aria-haspopup="true" aria-expanded="false" title="View cart">
+                    <svg class="cart-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M7 4h-2l-1 2m0 0l2.68 9.393A2 2 0 0 0 8.6 17h7.8a2 2 0 0 0 1.92-1.607L20 8H5m3 13a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm8 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Cart</span>
+                    {% if cart_summary and cart_summary.total_items > 0 %}
+                        <span id="cartCountBadge" class="cart-badge">{{ cart_summary.total_items }}</span>
+                    {% else %}
+                        <span id="cartCountBadge" class="cart-badge" style="display:none;">0</span>
+                    {% endif %}
+                </button>
+                <div id="cartDropdown" class="cart-dropdown" role="dialog" aria-label="Cart preview">
+                    <div style="padding:10px; text-align:center; color:#666;">Loading...</div>
+                </div>
+            </div>
         </div>
     </nav>
     
@@ -254,6 +330,53 @@
     
     <!-- Core JavaScript -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        (function() {
+            const btn = document.getElementById('cartButton');
+            const dropdown = document.getElementById('cartDropdown');
+            let loaded = false;
+
+            function openDropdown() {
+                dropdown.classList.add('open');
+                btn.setAttribute('aria-expanded', 'true');
+                if (!loaded) {
+                    fetch("{{ url_for('shop.cart_preview') }}", { credentials: 'same-origin' })
+                        .then(r => r.text())
+                        .then(html => {
+                            dropdown.innerHTML = html;
+                            loaded = true;
+                        })
+                        .catch(() => {
+                            dropdown.innerHTML = '<div class="cart-preview"><div class="empty">Unable to load cart.</div></div>';
+                        });
+                }
+            }
+
+            function closeDropdown() {
+                dropdown.classList.remove('open');
+                btn.setAttribute('aria-expanded', 'false');
+            }
+
+            btn?.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (dropdown.classList.contains('open')) {
+                    closeDropdown();
+                } else {
+                    openDropdown();
+                }
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!dropdown.contains(e.target) && !btn.contains(e.target)) {
+                    closeDropdown();
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeDropdown();
+            });
+        })();
+    </script>
     {% block scripts %}{% endblock %}
 </body>
 </html>
