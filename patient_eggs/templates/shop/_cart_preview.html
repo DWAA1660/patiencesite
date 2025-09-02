@@ -7,7 +7,7 @@
         <li class="cart-preview-item">
           <div class="left">
             {% if item.product_image %}
-              <img src="{{ item.product_image }}" alt="{{ item.product_name }}">
+              <img src="{{ url_for('static', filename='images/' + item.product_image) }}" alt="{{ item.product_name }}">
             {% endif %}
             <div class="meta">
               <div class="name">{{ item.product_name }}</div>

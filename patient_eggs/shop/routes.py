@@ -109,44 +109,54 @@ def add_to_cart():
             return redirect(url_for('shop.index'))
         
         product = products[product_id]
+        unit = product.get('unit', 'egg')
         
-        # Process the selected weeks from the form
+        # Support two flows: weekly selection vs simple quantity
         week_selections = {}
         total_eggs = 0
         
-        for key, value in request.form.items():
-            # Check if key is a week ID in format YYYY-WW (e.g., 2025-12)
-            if key.startswith('20') and '-' in key and value and int(value) > 0:
-                week_id = key
-                quantity = int(value)
-                
-                current_app.logger.info(f"Processing week: {week_id}, quantity: {quantity}")
-                
-                # Check if the week exists in our inventory
-                if not inventory_manager.check_availability(week_id, quantity):
-                    current_app.logger.error(f"Insufficient inventory for week {week_id}")
-                    flash('Sorry, one of your selected weeks no longer has enough inventory available.', 'error')
-                    return redirect(url_for('shop.product', product_id=product_id))
-                
-                week_selections[week_id] = quantity
-                total_eggs += quantity
-        
-        current_app.logger.info(f"Week selections: {week_selections}")
-        
-        if not week_selections:
-            flash('Please select at least one delivery week.', 'error')
-            return redirect(url_for('shop.product', product_id=product_id))
+        if product.get('requires_weekly_selection', False):
+            # Weekly: parse dynamic week inputs (e.g., 2025-12 => qty)
+            for key, value in request.form.items():
+                if key.startswith('20') and '-' in key and value and int(value) > 0:
+                    week_id = key
+                    quantity = int(value)
+                    current_app.logger.info(f"Processing week: {week_id}, quantity: {quantity}")
+                    # Validate inventory for each week
+                    if not inventory_manager.check_availability(week_id, quantity):
+                        current_app.logger.error(f"Insufficient inventory for week {week_id}")
+                        flash('Sorry, one of your selected weeks no longer has enough inventory available.', 'error')
+                        return redirect(url_for('shop.product', product_id=product_id))
+                    week_selections[week_id] = quantity
+                    total_eggs += quantity
+            current_app.logger.info(f"Week selections: {week_selections}")
+            if not week_selections:
+                flash('Please select at least one delivery week.', 'error')
+                return redirect(url_for('shop.product', product_id=product_id))
+        else:
+            # Simple product: use a single quantity from form
+            qty_str = request.form.get('quantity', '0')
+            try:
+                qty = int(qty_str)
+            except ValueError:
+                qty = 0
+            if qty <= 0:
+                flash(f'Please enter a valid quantity.', 'error')
+                return redirect(url_for('shop.product', product_id=product_id))
+            # Use a synthetic key so Cart/DB schema remains the same
+            week_selections = { f"{product_id}": qty }
+            total_eggs = qty
         
         # Check minimum and maximum order quantities
         min_quantity = product.get('min_quantity', 0)
         max_quantity = product.get('max_quantity', float('inf'))
         
         if total_eggs < min_quantity:
-            flash(f'Minimum order is {min_quantity} eggs.', 'error')
+            flash(f'Minimum order is {min_quantity} {unit}{"s" if int(min_quantity) != 1 else ""}.', 'error')
             return redirect(url_for('shop.product', product_id=product_id))
         
         if total_eggs > max_quantity:
-            flash(f'Maximum order is {max_quantity} eggs.', 'error')
+            flash(f'Maximum order is {max_quantity} {unit}{"s" if int(max_quantity) != 1 else ""}.', 'error')
             return redirect(url_for('shop.product', product_id=product_id))
         
         # Add to cart

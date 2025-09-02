@@ -29,6 +29,45 @@
     margin-bottom: 0.8rem;
     border-left: 4px solid var(--accent-color);
 }
+
+/* Enhance default list-group items created by JS */
+.selected-weeks-list .list-group-item {
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+.selected-week-row {
+    font-size: 0.95rem; /* normal size */
+}
+.review-left {
+    flex: 1 1 auto;
+}
+.review-week-label {
+    font-weight: 500;
+}
+.review-middle {
+    flex: 0 0 auto;
+    margin: 0 8px;
+}
+.review-remove {
+    flex: 0 0 auto;
+}
+.btn.btn-icon {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    line-height: 1;
+}
+.selected-weeks-list .btn-outline-danger {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    line-height: 1;
+}
 .week-info {
     display: flex;
     flex-direction: column;
@@ -103,6 +142,12 @@
     margin-top: 1rem;
     font-weight: 500;
 }
+.add-week-btn.btn-lg,
+.checkout-btn,
+.btn.btn-primary.btn-lg {
+    border-radius: 30px;
+    padding: 0.9rem 1.4rem;
+}
 .add-week-btn:hover {
     background-color: var(--accent-color);
 }
@@ -133,6 +178,12 @@
     border-radius: 8px;
     padding: 1.5rem;
     margin-top: 2rem;
+}
+.order-summary .card-body {
+    padding: 1rem;
+}
+.order-summary-title {
+    font-weight: 700;
 }
 .summary-header {
     margin-bottom: 1rem;
@@ -205,6 +256,59 @@
 .selected-weeks-title {
     margin-bottom: 1rem;
     font-size: 1rem;
+}
+
+/* Step-based layout for weekly selection */
+.step-block {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+.step-number {
+    flex: 0 0 auto;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+}
+.step-block + .step-block {
+    margin-top: 0.25rem;
+}
+.step-content {
+    flex: 1 1 auto;
+}
+
+/* Pending selection helper */
+.pending-selection {
+    font-size: 0.9rem;
+}
+
+/* Review panel wrapper to separate from order form */
+@media (min-width: 992px) { /* lg and up */
+  .review-sidebar { position: sticky; top: 1rem; }
+}
+.review-panel {
+    --review-bg: #f6f8ff; /* distinct, soft tint */
+    background: var(--review-bg);
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 14px;
+    padding: 0.75rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+.review-panel .card {
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 10px;
+}
+.review-header {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
 }
 
 /* Alert styling */
@@ -282,6 +386,13 @@
     margin-bottom: 2rem;
 }
 
+/* Header card */
+.product-header-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 12px;
+}
+
 .product-features {
     margin-top: 4rem;
     padding: 2rem;
@@ -335,4 +446,30 @@
     .product-container {
         grid-template-columns: 1fr;
     }
+}
+
+/* Product main image constraints */
+.product-image-container {
+    width: 100%;
+    max-width: 640px;
+}
+.product-main-image {
+    display: block;
+    width: 100% !important;
+    height: 420px !important; /* fixed visual height on desktop */
+    object-fit: cover !important;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+@media (max-width: 992px) {
+  .product-main-image {
+      height: 340px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .product-main-image {
+      height: 240px !important;
+  }
 }
