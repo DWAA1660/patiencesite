@@ -114,7 +114,15 @@
     form.addEventListener('submit', function(event) {
         event.preventDefault();
 
-        stripe.createToken(card).then(function(result) {
+        var cardData = {
+            name: document.getElementById('name').value,
+            address_line1: document.getElementById('address').value,
+            address_city: document.getElementById('city').value,
+            address_state: document.getElementById('state').value,
+            address_zip: document.getElementById('zip').value
+        };
+
+        stripe.createToken(card, cardData).then(function(result) {
             if (result.error) {
                 // Inform the user if there was an error.
                 var errorElement = document.getElementById('card-errors');

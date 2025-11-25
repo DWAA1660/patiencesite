@@ -180,7 +180,8 @@ def checkout():
                 currency='usd',
                 description=f'Order for {shipping_info["email"]}',
                 source=token,
-                metadata=shipping_info
+                metadata=shipping_info,
+                receipt_email=shipping_info['email']
             )
             
             # Payment successful, create order
