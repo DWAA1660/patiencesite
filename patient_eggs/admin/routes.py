@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from patient_eggs.models import Product, InventoryEggWeekly, Order, db
+import json
 
 admin = Blueprint('admin', __name__)
 
@@ -14,6 +15,18 @@ def require_admin():
 def dashboard():
     orders = Order.query.all()
     return render_template('admin/dashboard.html', orders=orders)
+
+@admin.route('/order/<int:order_id>')
+def view_order(order_id):
+    order = Order.query.get_or_404(order_id)
+    shipping_info = {}
+    if order.shipping_info:
+        try:
+            shipping_info = json.loads(order.shipping_info)
+        except:
+            shipping_info = {'raw': order.shipping_info}
+    
+    return render_template('admin/view_order.html', order=order, shipping_info=shipping_info)
 
 @admin.route('/inventory/eggs')
 def egg_inventory():

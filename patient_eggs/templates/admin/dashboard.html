@@ -47,7 +47,7 @@
                 <td>{{ order.status }}</td>
                 <td>{{ order.payment_status }}</td>
                 <td>
-                    <button class="btn btn-sm btn-info">View</button>
+                    <a href="{{ url_for('admin.view_order', order_id=order.id) }}" class="btn btn-sm btn-info">View</a>
                     <button class="btn btn-sm btn-success">Mark Shipped</button>
                 </td>
             </tr>
