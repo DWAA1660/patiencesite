@@ -5,3 +5,4 @@ Flask-Migrate
 stripe
 python-dotenv
 email_validator
+markdown
