@@ -92,3 +92,6 @@ class OrderItem(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     price_at_purchase = db.Column(db.Float, nullable=False)
     options = db.Column(db.Text) # JSON for specific options like week, gender, etc.
+
+    # Relationship to Product
+    product = db.relationship('Product', lazy=True)
