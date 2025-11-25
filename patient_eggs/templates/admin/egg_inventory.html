@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <h2>Egg Inventory Management</h2>
+    
+    <form action="{{ url_for('admin.update_egg_inventory') }}" method="POST">
+        <button type="submit" class="btn btn-primary mb-3 sticky-top" style="top: 70px; z-index: 100;">Save Changes</button>
+        
+        {% for product in products %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>{{ product.name }}</h4>
+            </div>
+            <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Week Starting</th>
+                            <th>Sold</th>
+                            <th>Available (Editable)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for inv in inventory[product.id] %}
+                        <tr>
+                            <td>{{ inv.week_start_date }}</td>
+                            <td>{{ inv.quantity_sold }}</td>
+                            <td>
+                                <input type="number" class="form-control form-control-sm" name="inv_{{ inv.id }}" value="{{ inv.quantity_available }}">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endfor %}
+    </form>
+</div>
+{% endblock %}

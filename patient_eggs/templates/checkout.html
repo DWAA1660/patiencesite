@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <h2>Checkout</h2>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <h4>Terms & Policies</h4>
+            <div id="policy-box" class="border p-3 mb-3" style="height: 200px; overflow-y: scroll; background: #f8f9fa;">
+                <p><strong>1. Introduction</strong></p>
+                <p>Welcome to Prairie Homestead. By purchasing from us, you agree to the following terms.</p>
+                <p><strong>2. Live Animal Policy</strong></p>
+                <p>We guarantee live arrival... (lots of text to scroll)...</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <p><strong>3. Shipping</strong></p>
+                <p>We ship via USPS Priority Mail Express...</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+                <p><strong>4. Refunds</strong></p>
+                <p>Deposits are non-refundable...</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+                <p>End of Policy.</p>
+            </div>
+            
+            <div class="form-check mb-4">
+                <input class="form-check-input" type="checkbox" value="" id="agreeCheck" disabled>
+                <label class="form-check-label" for="agreeCheck">
+                    I have read and agree to the Terms & Policies
+                </label>
+            </div>
+
+            <hr>
+            
+            <h4>Payment Details</h4>
+            <form id="payment-form">
+                <div id="card-element" class="form-control mb-3">
+                    <!-- Stripe Element will be inserted here -->
+                </div>
+                <div id="card-errors" role="alert" class="text-danger mb-3"></div>
+                
+                <button id="submit-button" class="btn btn-success btn-lg w-100" disabled>Pay Now</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Policy Scroll Logic
+    const policyBox = document.getElementById('policy-box');
+    const agreeCheck = document.getElementById('agreeCheck');
+    const submitButton = document.getElementById('submit-button');
+    
+    policyBox.addEventListener('scroll', function() {
+        if (policyBox.scrollTop + policyBox.clientHeight >= policyBox.scrollHeight - 10) {
+            agreeCheck.disabled = false;
+        }
+    });
+    
+    agreeCheck.addEventListener('change', function() {
+        submitButton.disabled = !this.checked;
+    });
+</script>
+{% endblock %}

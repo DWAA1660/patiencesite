@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <h2>Admin Dashboard</h2>
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">Total Orders</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ orders|length }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <a href="{{ url_for('admin.egg_inventory') }}" class="btn btn-warning btn-lg w-100 h-100 d-flex align-items-center justify-content-center">
+                Manage Egg Inventory
+            </a>
+        </div>
+    </div>
+
+    <h3>Recent Orders</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Payment</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.customer.username if order.customer else 'Guest' }}</td>
+                <td>{{ order.date_ordered.strftime('%Y-%m-%d') }}</td>
+                <td>${{ order.total_price }}</td>
+                <td>{{ order.status }}</td>
+                <td>{{ order.payment_status }}</td>
+                <td>
+                    <button class="btn btn-sm btn-info">View</button>
+                    <button class="btn btn-sm btn-success">Mark Shipped</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

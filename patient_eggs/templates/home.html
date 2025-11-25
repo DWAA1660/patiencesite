@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero p-5 text-center bg-image" style="background-image: url('https://via.placeholder.com/1200x400'); height: 400px; background-size: cover;">
+    <div class="d-flex justify-content-center align-items-center h-100">
+        <div class="text-white">
+            <h1 class="mb-3">Welcome to Prairie Homestead</h1>
+            <h4 class="mb-3">Quality Poultry & Hatching Eggs</h4>
+        </div>
+    </div>
+</div>
+
+<!-- 3D Icons Section -->
+<div class="container my-5">
+    <div class="row text-center">
+        <div class="col-md-4">
+            <div class="icon-card p-3 shadow rounded" style="transition: transform 0.3s;">
+                <h3>About</h3>
+                <p>Learn our story</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="icon-card p-3 shadow rounded" style="transition: transform 0.3s;">
+                <h3>Adult Birds</h3>
+                <p>Ready for your flock</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="icon-card p-3 shadow rounded" style="transition: transform 0.3s;">
+                <h3>Hatching Eggs</h3>
+                <p>Start from scratch</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Inventory -->
+<div class="container my-5">
+    <h2 class="text-center mb-4">Featured Inventory</h2>
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="{{ url_for('static', filename='img/' + product.image_file) }}" class="card-img-top" alt="{{ product.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.description[:50] }}...</p>
+                    <p class="card-text fw-bold">${{ product.price }}</p>
+                    <a href="{{ url_for('shop.product_detail', product_id=product.id) }}" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

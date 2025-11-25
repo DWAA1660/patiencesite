@@ -3,55 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Patient Eggs{% endblock %}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Merriweather:wght@300;400;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
-    {% block head %}{% endblock %}
+    <title>Prairie Homestead</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container navbar-content">
-            <a href="{{ url_for('main.index') }}" class="logo">Patient Eggs</a>
-            <div class="nav-links">
-                <a href="{{ url_for('main.index') }}">Home</a>
-                <a href="{{ url_for('shop.index') }}">Shop</a>
-                <a href="#">About Us</a>
-                <a href="#">Contact</a>
-            </div>
-            <div class="cart-menu">
-                <button id="cartButton" class="cart-button" aria-haspopup="true" aria-expanded="false" title="View cart">
-                    <svg class="cart-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <path d="M7 4h-2l-1 2m0 0l2.68 9.393A2 2 0 0 0 8.6 17h7.8a2 2 0 0 0 1.92-1.607L20 8H5m3 13a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm8 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span>Cart</span>
-                    {% if cart_summary and cart_summary.total_items > 0 %}
-                        <span id="cartCountBadge" class="cart-badge">{{ cart_summary.total_items }}</span>
+    <!-- Sticky Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('main.home') }}">Prairie Homestead</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('main.home') }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('main.about') }}">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('shop.adult_birds') }}">Adult Birds</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('shop.hatching_eggs') }}">Hatching Eggs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('shop.cart') }}">Cart</a></li>
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.is_admin %}
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.dashboard') }}">Admin</a></li>
+                        {% endif %}
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a></li>
                     {% else %}
-                        <span id="cartCountBadge" class="cart-badge" style="display:none;">0</span>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.login') }}">Login</a></li>
                     {% endif %}
-                </button>
-                <div id="cartDropdown" class="cart-dropdown" role="dialog" aria-label="Cart preview">
-                    <div style="padding:10px; text-align:center; color:#666;">Loading...</div>
-                </div>
+                </ul>
             </div>
         </div>
     </nav>
-    
-    {% block content %}{% endblock %}
-    
-    <footer>
-        <div class="container footer-content">
-            <div>
-                <div class="footer-logo">Patient Eggs</div>
-                <p class="footer-tagline">Farm-fresh eggs and homestead products delivered with love</p>
-            </div>
-            <p>&copy; {{ now.year }} Patient Eggs. All rights reserved.</p>
+
+    <!-- Flash Messages -->
+    <div class="container mt-3">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-info">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <div class="container">
+            <p>&copy; 2025 Prairie Homestead. All rights reserved.</p>
         </div>
     </footer>
-    
-    <!-- Core JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{ url_for('static', filename='js/site.js') }}"></script>
-    {% block scripts %}{% endblock %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

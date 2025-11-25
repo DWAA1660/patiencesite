@@ -1,32 +1,38 @@
-# Patient Eggs - Homestead Store
+# Prairie Homestead E-Commerce Site
 
-A charming online store for farm-fresh eggs and homestead products.
+## Tech Stack
+- Python (Flask)
+- SQLite
+- Stripe API (Integration Ready)
+- Bootstrap 5
 
 ## Setup
 
 1. Create a virtual environment:
-```bash
-python -m venv venv
-source venv/bin/activate
-```
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
 2. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-3. Create a `.env` file with your Stripe secret key:
-```
-STRIPE_SECRET_KEY=your_stripe_secret_key
-```
+3. Run the application:
+   ```bash
+   python run.py
+   ```
 
-4. Run the application:
-```bash
-python run.py
-```
+4. Access the site at `http://127.0.0.1:3236`.
 
 ## Features
-- Beautiful homestead-style design
-- Product catalog with farm-fresh eggs and other products
-- Secure payments via Stripe
-- Easy to extend with Flask blueprints
+- **Home Page**: Hero, 3D Icons, Gallery, Featured Items.
+- **Adult Birds**: Deposit logic (25% due).
+- **Hatching Eggs**: Weekly inventory system.
+- **Cart & Checkout**: Mocked Stripe integration, Policy Gate.
+- **Admin Dashboard**: Manage orders and weekly egg inventory.
+
+## Admin Access
+- Username: `admin`
+- Password: `admin`

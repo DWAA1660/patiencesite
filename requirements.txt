@@ -1,8 +1,7 @@
-Flask==3.0.2
-stripe==7.11.0
-python-dotenv==1.0.1
-Flask-WTF==1.2.1
-requests==2.31.0
-Flask-SQLAlchemy==3.1.1
-Flask-Session==0.6.0
-SQLAlchemy==2.0.27
+Flask
+Flask-SQLAlchemy
+Flask-Login
+Flask-Migrate
+stripe
+python-dotenv
+email_validator

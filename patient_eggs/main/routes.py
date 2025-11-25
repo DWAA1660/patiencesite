@@ -1,8 +1,15 @@
-from flask import render_template
-from patient_eggs.main import bp
-from patient_eggs.shop.products import products
+from flask import Blueprint, render_template
+from patient_eggs.models import Product
 
-@bp.route('/')
-def index():
-    featured_products = list(products.values())[:3]
-    return render_template('index.html', featured_products=featured_products)
+main = Blueprint('main', __name__)
+
+@main.route('/')
+@main.route('/home')
+def home():
+    # Logic for featured inventory (3x3 grid) can go here
+    featured_products = Product.query.limit(9).all()
+    return render_template('home.html', products=featured_products)
+
+@main.route('/about')
+def about():
+    return render_template('about.html')

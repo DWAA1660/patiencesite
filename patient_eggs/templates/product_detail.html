@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-6">
+            <img src="{{ url_for('static', filename='img/' + product.image_file) }}" class="img-fluid rounded" alt="{{ product.name }}">
+        </div>
+        <div class="col-md-6">
+            <h1>{{ product.name }}</h1>
+            <h3 class="text-muted">${{ product.price }}</h3>
+            <p>{{ product.description }}</p>
+            
+            <form action="{{ url_for('shop.add_to_cart') }}" method="POST">
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                
+                <div class="mb-3">
+                    <label for="quantity" class="form-label">Quantity</label>
+                    <input type="number" class="form-control" id="quantity" name="quantity" value="1" min="1">
+                </div>
+
+                {% if product.product_type == 'adult' %}
+                <div class="mb-3">
+                    <label for="gender" class="form-label">Gender</label>
+                    <select class="form-select" id="gender" name="gender">
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                    </select>
+                </div>
+                {% elif product.product_type == 'egg' %}
+                <div class="mb-3">
+                    <label for="week" class="form-label">Preferred Shipping Week</label>
+                    <select class="form-select" id="week" name="week" required>
+                        {% for week in weeks %}
+                        <option value="{{ week.week_start_date }}">Week of {{ week.week_start_date }} ({{ week.quantity_available - week.quantity_sold }} remaining)</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="substitute_date" name="substitute_date">
+                    <label class="form-check-label" for="substitute_date">I can handle a different shipping week if needed.</label>
+                </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="substitute_breed" name="substitute_breed">
+                    <label class="form-check-label" for="substitute_breed">I accept breed substitutes to keep the same date.</label>
+                </div>
+                {% endif %}
+
+                <button type="submit" class="btn btn-success btn-lg">Add to Cart</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
