@@ -31,6 +31,7 @@ def view_order(order_id):
 @admin.route('/calendar')
 def calendar():
     orders = Order.query.all()
+    products = Product.query.order_by(Product.name).all()
     events = []
     
     for order in orders:
@@ -71,10 +72,13 @@ def calendar():
                 'start': start_date,
                 'url': url_for('admin.view_order', order_id=order.id),
                 'color': color,
-                'allDay': True
+                'allDay': True,
+                'extendedProps': {
+                    'productId': item.product_id
+                }
             })
             
-    return render_template('admin/calendar.html', events=events)
+    return render_template('admin/calendar.html', events=events, products=products)
 
 @admin.route('/inventory/eggs')
 def egg_inventory():

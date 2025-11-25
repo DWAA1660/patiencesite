@@ -5,58 +5,116 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
+    var allEvents = {{ events|tojson|safe }};
+    
     var calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'dayGridMonth',
+      height: 600, // Limit height
       headerToolbar: {
         left: 'prev,next today',
         center: 'title',
-        right: 'dayGridMonth,timeGridWeek,listWeek'
+        right: 'dayGridMonth,listWeek'
       },
       themeSystem: 'bootstrap5',
-      events: {{ events|tojson|safe }},
+      events: allEvents,
       eventClick: function(info) {
         if (info.event.url) {
-            // Allow default behavior (navigation)
             return true;
         }
       }
     });
     calendar.render();
+
+    // Filter Logic
+    const checkboxes = document.querySelectorAll('.product-filter');
+    const selectAll = document.getElementById('selectAll');
+
+    function filterEvents() {
+        const selectedIds = Array.from(checkboxes)
+            .filter(cb => cb.checked)
+            .map(cb => parseInt(cb.value));
+        
+        const filtered = allEvents.filter(event => {
+            // If event has no productId (legacy?), show it, or handle as needed
+            // Assuming all new events have productId
+            return event.extendedProps && selectedIds.includes(event.extendedProps.productId);
+        });
+
+        calendar.removeAllEvents();
+        calendar.addEventSource(filtered);
+    }
+
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', filterEvents);
+    });
+
+    if(selectAll) {
+        selectAll.addEventListener('change', function(e) {
+            checkboxes.forEach(cb => cb.checked = e.target.checked);
+            filterEvents();
+        });
+    }
   });
 </script>
 <style>
     #calendar {
-        max-width: 100%;
-        margin: 0 auto;
         background: white;
-        padding: 20px;
+        padding: 15px;
         border-radius: 8px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        font-size: 0.9rem; /* Make text slightly smaller */
     }
     .fc-event {
         cursor: pointer;
+    }
+    .filter-panel {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        height: 100%;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid my-5">
-    <div class="d-flex justify-content-between align-items-center mb-4 px-4">
+<div class="container-fluid my-4">
+    <div class="d-flex justify-content-between align-items-center mb-3 px-4">
         <h2>Shipping Calendar</h2>
-        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary btn-sm">Back to Dashboard</a>
     </div>
     
-    <div class="px-4">
-        <div id='calendar'></div>
-    </div>
-    
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-12">
-                <h5>Legend:</h5>
-                <span class="badge bg-success me-2">Scheduled Shipment (Eggs)</span>
-                <span class="badge bg-danger me-2">New Order / Ship ASAP</span>
+    <div class="row px-4">
+        <!-- Filter Sidebar -->
+        <div class="col-md-3 mb-4">
+            <div class="filter-panel shadow-sm">
+                <h5 class="mb-3">Filter by Product</h5>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="selectAll" checked>
+                    <label class="form-check-label fw-bold" for="selectAll">Select All</label>
+                </div>
+                <hr>
+                <div style="max-height: 500px; overflow-y: auto;">
+                    {% for product in products %}
+                    <div class="form-check">
+                        <input class="form-check-input product-filter" type="checkbox" value="{{ product.id }}" id="prod_{{ product.id }}" checked>
+                        <label class="form-check-label" for="prod_{{ product.id }}">
+                            {{ product.name }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="mt-4">
+                    <h6>Legend:</h6>
+                    <div class="mb-1"><span class="badge bg-success">Scheduled (Eggs)</span></div>
+                    <div><span class="badge bg-danger">Ship ASAP</span></div>
+                </div>
             </div>
+        </div>
+
+        <!-- Calendar Area -->
+        <div class="col-md-9">
+            <div id='calendar'></div>
         </div>
     </div>
 </div>
