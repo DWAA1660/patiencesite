@@ -23,7 +23,10 @@ def product_detail(product_id):
     product = Product.query.get_or_404(product_id)
     weeks = []
     if product.product_type == 'egg':
-        weeks = InventoryEggWeekly.query.filter_by(product_id=product.id).filter(InventoryEggWeekly.quantity_available > 0).all()
+        # Filter weeks where available > sold
+        weeks = InventoryEggWeekly.query.filter_by(product_id=product.id)\
+            .filter(InventoryEggWeekly.quantity_available > InventoryEggWeekly.quantity_sold)\
+            .order_by(InventoryEggWeekly.week_start_date).all()
     return render_template('product_detail.html', product=product, weeks=weeks)
 
 @shop.route('/add_to_cart', methods=['POST'])

@@ -28,6 +28,54 @@ def view_order(order_id):
     
     return render_template('admin/view_order.html', order=order, shipping_info=shipping_info)
 
+@admin.route('/calendar')
+def calendar():
+    orders = Order.query.all()
+    events = []
+    
+    for order in orders:
+        customer_name = "Guest"
+        if order.customer:
+            customer_name = order.customer.username
+        elif order.shipping_info:
+            try:
+                info = json.loads(order.shipping_info)
+                customer_name = info.get('name', 'Guest')
+            except:
+                pass
+
+        for item in order.items:
+            start_date = None
+            title = f"#{order.id} {customer_name} - {item.product.name}"
+            color = '#3788d8' # Default blue
+            
+            # Try to find scheduled week
+            if item.options:
+                try:
+                    opts = json.loads(item.options)
+                    if 'week' in opts:
+                        start_date = opts['week']
+                        color = '#28a745' # Green for scheduled eggs
+                        title = f"SHIP: {title}"
+                except:
+                    pass
+            
+            # If no specific week, use order date (Ship ASAP)
+            if not start_date:
+                start_date = order.date_ordered.strftime('%Y-%m-%d')
+                color = '#dc3545' # Red for immediate/adult birds
+                title = f"NEW: {title}"
+
+            events.append({
+                'title': title,
+                'start': start_date,
+                'url': url_for('admin.view_order', order_id=order.id),
+                'color': color,
+                'allDay': True
+            })
+            
+    return render_template('admin/calendar.html', events=events)
+
 @admin.route('/inventory/eggs')
 def egg_inventory():
     products = Product.query.filter_by(product_type='egg').all()
