@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">{{ legend }}</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Product Name</label>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ product.name if product else '' }}" required>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="price" class="form-label">Price</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" step="0.01" class="form-control" id="price" name="price" value="{{ product.price if product else '' }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="product_type" class="form-label">Product Type</label>
+                                <select class="form-select" id="product_type" name="product_type" required>
+                                    <option value="adult" {% if product and product.product_type == 'adult' %}selected{% endif %}>Adult Bird (Instant)</option>
+                                    <option value="egg" {% if product and product.product_type == 'egg' %}selected{% endif %}>Hatching Eggs (Weeks)</option>
+                                    <option value="merch" {% if product and product.product_type == 'merch' %}selected{% endif %}>Merchandise</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="image_file" class="form-label">Image Filename</label>
+                                <input type="text" class="form-control" id="image_file" name="image_file" value="{{ product.image_file if product else 'default.jpg' }}" placeholder="e.g. chicken.jpg">
+                                <small class="text-muted">Upload images to static/img/ manually for now.</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="display_order" class="form-label">Display Order</label>
+                                <input type="number" class="form-control" id="display_order" name="display_order" value="{{ product.display_order if product else 0 }}">
+                                <small class="text-muted">Lower numbers appear first on home page.</small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description (Markdown Supported)</label>
+                            <textarea class="form-control" id="description" name="description" rows="6" required>{{ product.description if product else '' }}</textarea>
+                            <small class="text-muted">You can use **bold**, *italics*, - lists, etc.</small>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">{{ legend }}</button>
+                            <a href="{{ url_for('admin.manage_products') }}" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

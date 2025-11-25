@@ -37,6 +37,7 @@ class Product(db.Model):
     price = db.Column(db.Float, nullable=False)
     product_type = db.Column(db.String(20), nullable=False) # 'adult', 'egg', 'merch'
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
+    display_order = db.Column(db.Integer, default=0)
     
     # Relationships
     inventory_adult = db.relationship('InventoryAdult', backref='product', uselist=False, lazy=True)

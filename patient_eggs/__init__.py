@@ -2,6 +2,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from config import Config
+import markdown
+from markupsafe import Markup
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -13,6 +15,10 @@ def create_app(config_class=Config):
 
     db.init_app(app)
     login_manager.init_app(app)
+    
+    @app.template_filter('markdown')
+    def render_markdown(text):
+        return Markup(markdown.markdown(text))
 
     # Import and register blueprints
     from patient_eggs.main.routes import main

@@ -1,7 +1,9 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, session, current_app
-from patient_eggs.models import Product, InventoryEggWeekly
+from flask_login import current_user
+from patient_eggs.models import Product, InventoryEggWeekly, Order, OrderItem
 from patient_eggs import db
 import json
+import stripe
 
 shop = Blueprint('shop', __name__)
 
@@ -121,5 +123,106 @@ def cart():
 
 @shop.route('/checkout', methods=['GET', 'POST'])
 def checkout():
-    # Stripe logic would go here
-    return render_template('checkout.html', key=current_app.config['STRIPE_PUBLIC_KEY'])
+    cart = session.get('cart', {})
+    if not cart.get('items'):
+        flash('Your cart is empty.')
+        return redirect(url_for('shop.cart'))
+
+    # Calculate totals
+    items = []
+    total = 0
+    deposit_total = 0
+    
+    for item in cart['items']:
+        product = Product.query.get(item['product_id'])
+        if product:
+            item_total = product.price * item['quantity']
+            total += item_total
+            
+            if product.product_type == 'adult':
+                deposit_total += item_total * 0.25
+            else:
+                deposit_total += item_total
+            
+            items.append({
+                'product': product,
+                'quantity': item['quantity'],
+                'options': item['options'],
+                'total': item_total,
+                'price': product.price
+            })
+    
+    if request.method == 'POST':
+        token = request.form.get('stripeToken')
+        if not token:
+            flash('An error occurred with the payment provider.')
+            return redirect(url_for('shop.checkout'))
+        
+        stripe.api_key = current_app.config['STRIPE_SECRET_KEY']
+        
+        try:
+            # Charge the user's card
+            # Amount in cents
+            amount_to_charge = int(deposit_total * 100)
+            
+            charge = stripe.Charge.create(
+                amount=amount_to_charge,
+                currency='usd',
+                description='Prairie Homestead Order',
+                source=token,
+            )
+            
+            # Payment successful, create order
+            order = Order(
+                user_id=current_user.id if current_user.is_authenticated else None,
+                total_price=total,
+                payment_status='Deposit Paid' if deposit_total < total else 'Full Paid',
+                stripe_charge_id=charge.id,
+                shipping_info='TBD' # Placeholder
+            )
+            db.session.add(order)
+            db.session.commit()
+            
+            # Add items to order
+            for item in items:
+                order_item = OrderItem(
+                    order_id=order.id,
+                    product_id=item['product'].id,
+                    quantity=item['quantity'],
+                    price_at_purchase=item['price'],
+                    options=json.dumps(item['options'])
+                )
+                db.session.add(order_item)
+                
+                # Update Inventory (Simplified)
+                # Note: A more robust system would check stock availability again here
+                if item['product'].product_type == 'adult':
+                    inv = item['product'].inventory_adult
+                    if inv:
+                        inv.quantity -= item['quantity']
+                elif item['product'].product_type == 'egg' and 'week' in item['options']:
+                    # Find the specific week inventory
+                    # Week option is stored as string "YYYY-MM-DD" or similar from form
+                    pass # TODO: Implement specific week inventory decrement
+
+            db.session.commit()
+            
+            # Clear cart
+            session.pop('cart', None)
+            
+            flash(f'Payment successful! Order #{order.id} created.')
+            return redirect(url_for('main.home'))
+            
+        except stripe.error.CardError as e:
+            # Since it's a decline, stripe.error.CardError will be caught
+            body = e.json_body
+            err  = body.get('error', {})
+            flash(f"Payment failed: {err.get('message')}")
+        except stripe.error.StripeError as e:
+            # Display a very generic error to the user, and maybe log the exception
+            flash('Something went wrong. You were not charged. Please try again.')
+        except Exception as e:
+            # Something else happened, completely unrelated to Stripe
+            flash(f'An error occurred: {str(e)}')
+            
+    return render_template('checkout.html', key=current_app.config['STRIPE_PUBLIC_KEY'], total=total, deposit_total=deposit_total)
