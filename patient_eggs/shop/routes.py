@@ -157,6 +157,16 @@ def checkout():
         if not token:
             flash('An error occurred with the payment provider.')
             return redirect(url_for('shop.checkout'))
+            
+        # Capture Shipping Info
+        shipping_info = {
+            'name': request.form.get('name'),
+            'email': request.form.get('email'),
+            'address': request.form.get('address'),
+            'city': request.form.get('city'),
+            'state': request.form.get('state'),
+            'zip': request.form.get('zip')
+        }
         
         stripe.api_key = current_app.config['STRIPE_SECRET_KEY']
         
@@ -168,8 +178,9 @@ def checkout():
             charge = stripe.Charge.create(
                 amount=amount_to_charge,
                 currency='usd',
-                description='Prairie Homestead Order',
+                description=f'Order for {shipping_info["email"]}',
                 source=token,
+                metadata=shipping_info
             )
             
             # Payment successful, create order
@@ -178,7 +189,7 @@ def checkout():
                 total_price=total,
                 payment_status='Deposit Paid' if deposit_total < total else 'Full Paid',
                 stripe_charge_id=charge.id,
-                shipping_info='TBD' # Placeholder
+                shipping_info=json.dumps(shipping_info)
             )
             db.session.add(order)
             db.session.commit()
