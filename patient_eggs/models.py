@@ -2,9 +2,18 @@ from datetime import datetime, timedelta
 from patient_eggs import db, login_manager
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+import os
 
 @login_manager.user_loader
 def load_user(user_id):
+    if int(user_id) == 0:
+        # Return virtual admin user from environment variables
+        return User(
+            id=0, 
+            username=os.environ.get('ADMIN_USERNAME', 'SuperAdmin'), 
+            email=os.environ.get('ADMIN_EMAIL'), 
+            is_admin=True
+        )
     return User.query.get(int(user_id))
 
 class User(db.Model, UserMixin):

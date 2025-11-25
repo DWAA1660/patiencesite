@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request, session
+from flask import Blueprint, render_template, redirect, url_for, flash, request, session, current_app
 from patient_eggs.models import Product, InventoryEggWeekly
 from patient_eggs import db
 import json
@@ -54,6 +54,44 @@ def add_to_cart():
     flash('Added to cart!')
     return redirect(url_for('shop.cart'))
 
+@shop.route('/update_cart_item/<int:item_index>', methods=['POST'])
+def update_cart_item(item_index):
+    cart = session.get('cart', {})
+    if 'items' in cart and 0 <= item_index < len(cart['items']):
+        try:
+            new_quantity = int(request.form.get('quantity'))
+            if new_quantity > 0:
+                cart['items'][item_index]['quantity'] = new_quantity
+                session.modified = True
+                flash('Cart updated.')
+            else:
+                # If 0 or negative, remove it? Or just flash error? Let's remove if 0.
+                cart['items'].pop(item_index)
+                session.modified = True
+                flash('Item removed from cart.')
+        except ValueError:
+            flash('Invalid quantity.')
+    
+    session['cart'] = cart
+    return redirect(url_for('shop.cart'))
+
+@shop.route('/remove_from_cart/<int:item_index>')
+def remove_from_cart(item_index):
+    cart = session.get('cart', {})
+    if 'items' in cart and 0 <= item_index < len(cart['items']):
+        cart['items'].pop(item_index)
+        session.modified = True
+        flash('Item removed from cart.')
+    
+    session['cart'] = cart
+    return redirect(url_for('shop.cart'))
+
+@shop.route('/clear_cart')
+def clear_cart():
+    session.pop('cart', None)
+    flash('Cart cleared.')
+    return redirect(url_for('shop.cart'))
+
 @shop.route('/cart')
 def cart():
     cart = session.get('cart', {})
@@ -84,4 +122,4 @@ def cart():
 @shop.route('/checkout', methods=['GET', 'POST'])
 def checkout():
     # Stripe logic would go here
-    return render_template('checkout.html')
+    return render_template('checkout.html', key=current_app.config['STRIPE_PUBLIC_KEY'])
