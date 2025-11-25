@@ -95,3 +95,10 @@ class OrderItem(db.Model):
 
     # Relationship to Product
     product = db.relationship('Product', lazy=True)
+
+class GalleryImage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    image_file = db.Column(db.String(100), nullable=False)
+    caption = db.Column(db.String(200))
+    display_order = db.Column(db.Integer, default=0)
+

@@ -1,5 +1,5 @@
 from patient_eggs import create_app, db
-from patient_eggs.models import User, Product, InventoryAdult, InventoryEggWeekly
+from patient_eggs.models import User, Product, InventoryAdult, InventoryEggWeekly, GalleryImage
 
 app = create_app()
 

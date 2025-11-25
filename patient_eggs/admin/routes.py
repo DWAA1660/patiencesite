@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
-from patient_eggs.models import Product, InventoryEggWeekly, Order, db
+from patient_eggs.models import Product, InventoryEggWeekly, Order, GalleryImage, db
 import json
 
 admin = Blueprint('admin', __name__)
@@ -174,3 +174,45 @@ def delete_product(product_id):
     db.session.commit()
     flash('Product deleted.')
     return redirect(url_for('admin.manage_products'))
+
+# --- Gallery Management ---
+@admin.route('/gallery')
+def manage_gallery():
+    images = GalleryImage.query.order_by(GalleryImage.display_order).all()
+    return render_template('admin/gallery.html', images=images)
+
+@admin.route('/gallery/add', methods=['POST'])
+def add_gallery_image():
+    image_file = request.form.get('image_file')
+    caption = request.form.get('caption')
+    display_order = int(request.form.get('display_order', 0))
+    
+    if image_file:
+        img = GalleryImage(image_file=image_file, caption=caption, display_order=display_order)
+        db.session.add(img)
+        db.session.commit()
+        flash('Image added to gallery.')
+    
+    return redirect(url_for('admin.manage_gallery'))
+
+@admin.route('/gallery/delete/<int:image_id>', methods=['POST'])
+def delete_gallery_image(image_id):
+    img = GalleryImage.query.get_or_404(image_id)
+    db.session.delete(img)
+    db.session.commit()
+    flash('Image removed.')
+    return redirect(url_for('admin.manage_gallery'))
+
+@admin.route('/api/images')
+def list_images():
+    # List files in static/img
+    import os
+    from flask import current_app
+    img_folder = os.path.join(current_app.root_path, 'static', 'img')
+    images = []
+    if os.path.exists(img_folder):
+        for f in os.listdir(img_folder):
+            if f.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp')):
+                images.append(f)
+    return {'images': images}
+

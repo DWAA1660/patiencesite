@@ -81,19 +81,17 @@
 <div class="container my-5">
     <h2 class="text-center mb-4">Farm Gallery</h2>
     <div class="row g-3">
-        <!-- Placeholders for Gallery -->
-        <div class="col-md-3 col-6">
-            <img src="https://via.placeholder.com/400x400?text=Farm+1" class="gallery-img rounded shadow-sm" alt="Gallery 1">
-        </div>
-        <div class="col-md-3 col-6">
-            <img src="https://via.placeholder.com/400x400?text=Chickens" class="gallery-img rounded shadow-sm" alt="Gallery 2">
-        </div>
-        <div class="col-md-3 col-6">
-            <img src="https://via.placeholder.com/400x400?text=Pasture" class="gallery-img rounded shadow-sm" alt="Gallery 3">
-        </div>
-        <div class="col-md-3 col-6">
-            <img src="https://via.placeholder.com/400x400?text=Eggs" class="gallery-img rounded shadow-sm" alt="Gallery 4">
-        </div>
+        {% if gallery_images %}
+            {% for image in gallery_images %}
+            <div class="col-md-3 col-6">
+                <img src="{{ url_for('static', filename='img/' + image.image_file) }}" class="gallery-img rounded shadow-sm" alt="{{ image.caption or 'Gallery Image' }}">
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12 text-center text-muted">
+                <p>No images in gallery yet.</p>
+            </div>
+        {% endif %}
     </div>
 </div>
 
