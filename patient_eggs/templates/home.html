@@ -2,34 +2,54 @@
 
 {% block content %}
 <!-- Hero Section -->
-<div class="hero p-5 text-center bg-image" style="background-image: url('https://via.placeholder.com/1200x400'); height: 400px; background-size: cover;">
-    <div class="d-flex justify-content-center align-items-center h-100">
-        <div class="text-white">
-            <h1 class="mb-3">Welcome to Prairie Homestead</h1>
-            <h4 class="mb-3">Quality Poultry & Hatching Eggs</h4>
+<div class="hero p-5 text-center bg-image" style="background-image: url('https://via.placeholder.com/1200x400'); height: 500px; background-size: cover;">
+    <div class="text-white w-100">
+        <h1 class="mb-3 display-3 fw-bold">Welcome to Prairie Homestead</h1>
+        <h4 class="mb-4">Quality Poultry & Hatching Eggs</h4>
+        
+        <!-- Fall Themed Buttons -->
+        <div class="d-flex justify-content-center gap-3 mt-4">
+            <a href="{{ url_for('shop.adult_birds') }}" class="btn btn-fall-1 btn-lg px-4 rounded-pill">Shop Birds</a>
+            <a href="{{ url_for('shop.hatching_eggs') }}" class="btn btn-fall-2 btn-lg px-4 rounded-pill">Hatching Eggs</a>
+            <a href="{{ url_for('main.about') }}" class="btn btn-fall-3 btn-lg px-4 rounded-pill">Our Story</a>
         </div>
+    </div>
+</div>
+
+<!-- Large Paragraph Banner -->
+<div class="para-banner my-5">
+    <div class="container">
+        <h2 class="mb-3">Raising Standards, Naturally.</h2>
+        <p class="lead">
+            At Prairie Homestead, we believe in sustainable farming and ethical poultry raising. 
+            Our birds are raised on open pastures, ensuring healthy flocks and superior quality eggs.
+            Whether you are looking to start your own flock or add unique genetics, we are here to help you succeed.
+        </p>
     </div>
 </div>
 
 <!-- 3D Icons Section -->
 <div class="container my-5">
     <div class="row text-center">
-        <div class="col-md-4">
-            <div class="icon-card p-3 shadow rounded" style="transition: transform 0.3s;">
-                <h3>About</h3>
+        <div class="col-md-4 mb-3">
+            <div class="icon-card p-4 shadow rounded h-100">
+                <h3 class="text-primary">About</h3>
                 <p>Learn our story</p>
+                <a href="{{ url_for('main.about') }}" class="stretched-link"></a>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="icon-card p-3 shadow rounded" style="transition: transform 0.3s;">
-                <h3>Adult Birds</h3>
+        <div class="col-md-4 mb-3">
+            <div class="icon-card p-4 shadow rounded h-100">
+                <h3 class="text-warning">Adult Birds</h3>
                 <p>Ready for your flock</p>
+                <a href="{{ url_for('shop.adult_birds') }}" class="stretched-link"></a>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="icon-card p-3 shadow rounded" style="transition: transform 0.3s;">
-                <h3>Hatching Eggs</h3>
+        <div class="col-md-4 mb-3">
+            <div class="icon-card p-4 shadow rounded h-100">
+                <h3 class="text-success">Hatching Eggs</h3>
                 <p>Start from scratch</p>
+                <a href="{{ url_for('shop.hatching_eggs') }}" class="stretched-link"></a>
             </div>
         </div>
     </div>
@@ -41,17 +61,55 @@
     <div class="row">
         {% for product in products %}
         <div class="col-md-4 mb-4">
-            <div class="card h-100">
+            <div class="card h-100 shadow-sm">
                 <img src="{{ url_for('static', filename='img/' + product.image_file) }}" class="card-img-top" alt="{{ product.name }}">
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{ product.name }}</h5>
-                    <p class="card-text">{{ product.description[:50] }}...</p>
-                    <p class="card-text fw-bold">${{ product.price }}</p>
-                    <a href="{{ url_for('shop.product_detail', product_id=product.id) }}" class="btn btn-primary">View Details</a>
+                    <p class="card-text text-muted">{{ product.description[:60] }}...</p>
+                    <div class="mt-auto">
+                        <p class="card-text fw-bold fs-5">${{ product.price }}</p>
+                        <a href="{{ url_for('shop.product_detail', product_id=product.id) }}" class="btn btn-outline-primary w-100">View Details</a>
+                    </div>
                 </div>
             </div>
         </div>
         {% endfor %}
+    </div>
+</div>
+
+<!-- Photo Gallery -->
+<div class="container my-5">
+    <h2 class="text-center mb-4">Farm Gallery</h2>
+    <div class="row g-3">
+        <!-- Placeholders for Gallery -->
+        <div class="col-md-3 col-6">
+            <img src="https://via.placeholder.com/400x400?text=Farm+1" class="gallery-img rounded shadow-sm" alt="Gallery 1">
+        </div>
+        <div class="col-md-3 col-6">
+            <img src="https://via.placeholder.com/400x400?text=Chickens" class="gallery-img rounded shadow-sm" alt="Gallery 2">
+        </div>
+        <div class="col-md-3 col-6">
+            <img src="https://via.placeholder.com/400x400?text=Pasture" class="gallery-img rounded shadow-sm" alt="Gallery 3">
+        </div>
+        <div class="col-md-3 col-6">
+            <img src="https://via.placeholder.com/400x400?text=Eggs" class="gallery-img rounded shadow-sm" alt="Gallery 4">
+        </div>
+    </div>
+</div>
+
+<!-- Lightbox Modal -->
+<div class="modal fade" id="galleryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content bg-transparent border-0">
+            <div class="modal-body position-relative text-center">
+                <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="d-flex align-items-center justify-content-between">
+                    <button id="lightboxPrev" class="btn btn-dark rounded-circle me-2">&lt;</button>
+                    <img id="lightboxImage" src="" class="modal-img rounded shadow" alt="Full Size">
+                    <button id="lightboxNext" class="btn btn-dark rounded-circle ms-2">&gt;</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

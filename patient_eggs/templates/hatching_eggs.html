@@ -1,21 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container my-5">
-    <h1 class="text-center mb-4">Hatching Eggs</h1>
-    <div class="alert alert-warning text-center">
-        <strong>Pre-order:</strong> Full payment is required to book your shipping week.
+<!-- Hatching Eggs Hero -->
+<div class="hero p-5 text-center bg-image" style="background-image: url('https://via.placeholder.com/1200x300?text=Hatching+Eggs'); height: 300px; background-size: cover;">
+    <div class="text-white w-100">
+        <h1 class="display-4 fw-bold">Hatching Eggs</h1>
+        <p class="lead">Start your flock from scratch with our premium genetics.</p>
     </div>
+</div>
+
+<div class="container my-5">
+    <!-- Pre-Order Notice -->
+    <div class="alert alert-warning text-center border-warning shadow-sm p-4 mb-5">
+        <h3 class="alert-heading fw-bold">PRE-ORDER NOW</h3>
+        <p class="lead mb-0">Due to high demand, our hatching eggs are sold on a pre-order basis. Full payment is required to secure your shipping week. We ship freshly collected eggs every Monday.</p>
+    </div>
+
     <div class="row">
         {% for product in products %}
         <div class="col-md-4 mb-4">
-            <div class="card h-100">
+            <div class="card h-100 shadow-sm">
                 <img src="{{ url_for('static', filename='img/' + product.image_file) }}" class="card-img-top" alt="{{ product.name }}">
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{ product.name }}</h5>
-                    <p class="card-text">{{ product.description }}</p>
-                    <p class="card-text fw-bold">${{ product.price }} / dozen</p>
-                    <a href="{{ url_for('shop.product_detail', product_id=product.id) }}" class="btn btn-primary">View Details</a>
+                    <p class="card-text text-muted">{{ product.description[:80] }}...</p>
+                    <div class="mt-auto">
+                        <p class="card-text fw-bold fs-5 text-success">${{ product.price }} <span class="fs-6 fw-normal text-muted">/ dozen</span></p>
+                        <a href="{{ url_for('shop.product_detail', product_id=product.id) }}" class="btn btn-outline-success w-100">Pre-Order</a>
+                    </div>
                 </div>
             </div>
         </div>

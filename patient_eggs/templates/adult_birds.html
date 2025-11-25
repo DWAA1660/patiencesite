@@ -1,21 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container my-5">
-    <h1 class="text-center mb-4">Adult Birds</h1>
-    <div class="alert alert-info text-center">
-        <strong>Note:</strong> A 25% deposit is required to reserve your birds.
+<!-- Adult Birds Hero -->
+<div class="hero p-5 text-center bg-image" style="background-image: url('https://via.placeholder.com/1200x300?text=Adult+Birds'); height: 300px; background-size: cover;">
+    <div class="text-white w-100">
+        <h1 class="display-4 fw-bold">Adult Birds</h1>
+        <p class="lead">Mature, healthy birds ready for your coop.</p>
     </div>
+</div>
+
+<div class="container my-5">
+    <!-- Deposit Notice -->
+    <div class="alert alert-info text-center border-info shadow-sm p-4 mb-5">
+        <h3 class="alert-heading fw-bold">RESERVATION DEPOSIT REQUIRED</h3>
+        <p class="lead mb-0">To ensure serious inquiries and manage our flock efficiently, a non-refundable <strong>25% deposit</strong> is required to reserve any adult bird. The remaining balance is due upon pickup.</p>
+    </div>
+
     <div class="row">
         {% for product in products %}
         <div class="col-md-4 mb-4">
-            <div class="card h-100">
+            <div class="card h-100 shadow-sm">
                 <img src="{{ url_for('static', filename='img/' + product.image_file) }}" class="card-img-top" alt="{{ product.name }}">
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{ product.name }}</h5>
-                    <p class="card-text">{{ product.description }}</p>
-                    <p class="card-text fw-bold">${{ product.price }}</p>
-                    <a href="{{ url_for('shop.product_detail', product_id=product.id) }}" class="btn btn-primary">View Details</a>
+                    <p class="card-text text-muted">{{ product.description[:80] }}...</p>
+                    <div class="mt-auto">
+                        <p class="card-text fw-bold fs-5 text-primary">${{ product.price }}</p>
+                        <a href="{{ url_for('shop.product_detail', product_id=product.id) }}" class="btn btn-outline-primary w-100">Reserve Now</a>
+                    </div>
                 </div>
             </div>
         </div>
