@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <h2>{{ legend }}</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{ blog.title if blog else title }}" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="slug" class="form-label">Slug (optional)</label>
+            <input type="text" class="form-control" id="slug" name="slug" value="{{ blog.slug if blog else slug }}">
+            <div class="form-text">Leave blank to auto-generate from title.</div>
+        </div>
+
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="is_published" name="is_published" {% if blog and blog.is_published %}checked{% endif %}>
+            <label class="form-check-label" for="is_published">
+                Publish immediately
+            </label>
+        </div>
+
+        <div class="mb-3">
+            <label for="content" class="form-label">Content</label>
+            <textarea id="editor" name="content">{{ blog.content if blog else content }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Post</button>
+        <a href="{{ url_for('admin.manage_blogs') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: '#editor',
+        plugins: 'image link lists table media code',
+        toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image media | code',
+        images_upload_url: "{{ url_for('admin.upload_blog_image') }}",
+        automatic_uploads: true,
+        file_picker_types: 'image',
+        height: 500,
+        /* and here's our custom image picker*/
+        file_picker_callback: function (cb, value, meta) {
+            var input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+            input.onchange = function () {
+                var file = this.files[0];
+                var reader = new FileReader();
+                reader.onload = function () {
+                    /*
+                      Note: Now we need to register the blob in TinyMCEs image blob
+                      registry. In the next release this part hopefully won't be
+                      necessary, as we are looking to handle it internally.
+                    */
+                    var id = 'blobid' + (new Date()).getTime();
+                    var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
+                    var base64 = reader.result.split(',')[1];
+                    var blobInfo = blobCache.create(id, file, base64);
+                    blobCache.add(blobInfo);
+
+                    /* call the callback and populate the Title field with the file name */
+                    cb(blobInfo.blobUri(), { title: file.name });
+                };
+                reader.readAsDataURL(file);
+            };
+            input.click();
+        }
+    });
+</script>
+{% endblock %}

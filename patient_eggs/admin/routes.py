@@ -1,7 +1,10 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
-from patient_eggs.models import Product, InventoryEggWeekly, Order, GalleryImage, db
+from patient_eggs.models import Product, InventoryEggWeekly, Order, GalleryImage, BlogPost, InventoryAdult, db
+from werkzeug.utils import secure_filename
 import json
+import os
+from datetime import datetime
 
 admin = Blueprint('admin', __name__)
 
@@ -215,4 +218,87 @@ def list_images():
             if f.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp')):
                 images.append(f)
     return {'images': images}
+
+# --- Blog Management ---
+@admin.route('/blogs')
+def manage_blogs():
+    blogs = BlogPost.query.order_by(BlogPost.created_at.desc()).all()
+    return render_template('admin/manage_blogs.html', blogs=blogs)
+
+@admin.route('/blogs/add', methods=['GET', 'POST'])
+def add_blog():
+    if request.method == 'POST':
+        title = request.form.get('title')
+        slug = request.form.get('slug')
+        content = request.form.get('content')
+        is_published = 'is_published' in request.form
+        
+        if not slug:
+            slug = title.lower().replace(' ', '-')
+            
+        # Handle duplicate slug
+        if BlogPost.query.filter_by(slug=slug).first():
+            flash('Slug already exists. Please choose a different one.')
+            return render_template('admin/edit_blog.html', legend='Add Blog Post', title=title, content=content, slug=slug)
+
+        blog = BlogPost(title=title, slug=slug, content=content, is_published=is_published)
+        db.session.add(blog)
+        db.session.commit()
+        flash('Blog post created!')
+        return redirect(url_for('admin.manage_blogs'))
+        
+    return render_template('admin/edit_blog.html', legend='Add Blog Post')
+
+@admin.route('/blogs/edit/<int:blog_id>', methods=['GET', 'POST'])
+def edit_blog(blog_id):
+    blog = BlogPost.query.get_or_404(blog_id)
+    if request.method == 'POST':
+        blog.title = request.form.get('title')
+        new_slug = request.form.get('slug')
+        if new_slug != blog.slug:
+             if BlogPost.query.filter_by(slug=new_slug).first():
+                 flash('Slug already exists.')
+                 return render_template('admin/edit_blog.html', legend='Edit Blog Post', blog=blog)
+        blog.slug = new_slug
+        blog.content = request.form.get('content')
+        blog.is_published = 'is_published' in request.form
+        
+        db.session.commit()
+        flash('Blog post updated!')
+        return redirect(url_for('admin.manage_blogs'))
+        
+    return render_template('admin/edit_blog.html', legend='Edit Blog Post', blog=blog)
+
+@admin.route('/blogs/delete/<int:blog_id>', methods=['POST'])
+def delete_blog(blog_id):
+    blog = BlogPost.query.get_or_404(blog_id)
+    db.session.delete(blog)
+    db.session.commit()
+    flash('Blog post deleted.')
+    return redirect(url_for('admin.manage_blogs'))
+
+@admin.route('/blogs/upload_image', methods=['POST'])
+def upload_blog_image():
+    if 'file' not in request.files:
+        return {'error': 'No file uploaded'}, 400
+    file = request.files['file']
+    if file.filename == '':
+        return {'error': 'No filename'}, 400
+        
+    if file:
+        filename = secure_filename(file.filename)
+        # Add timestamp to make filename unique
+        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+        filename = f"{timestamp}_{filename}"
+        
+        from flask import current_app
+        save_path = os.path.join(current_app.root_path, 'static', 'img', 'blog')
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)
+            
+        file.save(os.path.join(save_path, filename))
+        
+        # Return URL
+        url = url_for('static', filename=f'img/blog/{filename}')
+        return {'location': url} # TinyMCE expects 'location'
 

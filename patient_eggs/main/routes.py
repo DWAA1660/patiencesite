@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template
-from patient_eggs.models import Product, GalleryImage
+from flask import Blueprint, render_template, request
+from flask_login import current_user
+from patient_eggs.models import Product, GalleryImage, BlogPost, db
 
 main = Blueprint('main', __name__)
 
@@ -18,4 +19,25 @@ def about():
 @main.route('/contact')
 def contact():
     return render_template('contact.html')
+
+@main.route('/blog')
+def blog_index():
+    page = request.args.get('page', 1, type=int)
+    posts = BlogPost.query.filter_by(is_published=True)\
+        .order_by(BlogPost.created_at.desc())\
+        .paginate(page=page, per_page=5)
+    return render_template('blog/index.html', posts=posts)
+
+@main.route('/blog/<slug>')
+def blog_post(slug):
+    post = BlogPost.query.filter_by(slug=slug).first_or_404()
+    if post.is_published or (current_user.is_authenticated and current_user.is_admin):
+        # Increment views
+        post.views += 1
+        db.session.commit()
+        return render_template('blog/post.html', post=post)
+    else:
+        # If not published and not admin
+        from flask import abort
+        abort(404)
 
