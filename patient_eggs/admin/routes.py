@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app
 from flask_login import login_required, current_user
 from patient_eggs.models import Product, InventoryEggWeekly, Order, GalleryImage, BlogPost, InventoryAdult, db
 from werkzeug.utils import secure_filename
@@ -239,7 +239,7 @@ def add_blog():
         # Handle duplicate slug
         if BlogPost.query.filter_by(slug=slug).first():
             flash('Slug already exists. Please choose a different one.')
-            return render_template('admin/edit_blog.html', legend='Add Blog Post', title=title, content=content, slug=slug)
+            return render_template('admin/edit_blog.html', legend='Add Blog Post', title=title, content=content, slug=slug, tinymce_api_key=current_app.config.get('TINYMCE_API_KEY'))
 
         blog = BlogPost(title=title, slug=slug, content=content, is_published=is_published)
         db.session.add(blog)
@@ -247,7 +247,7 @@ def add_blog():
         flash('Blog post created!')
         return redirect(url_for('admin.manage_blogs'))
         
-    return render_template('admin/edit_blog.html', legend='Add Blog Post')
+    return render_template('admin/edit_blog.html', legend='Add Blog Post', tinymce_api_key=current_app.config.get('TINYMCE_API_KEY'))
 
 @admin.route('/blogs/edit/<int:blog_id>', methods=['GET', 'POST'])
 def edit_blog(blog_id):
@@ -258,7 +258,7 @@ def edit_blog(blog_id):
         if new_slug != blog.slug:
              if BlogPost.query.filter_by(slug=new_slug).first():
                  flash('Slug already exists.')
-                 return render_template('admin/edit_blog.html', legend='Edit Blog Post', blog=blog)
+                 return render_template('admin/edit_blog.html', legend='Edit Blog Post', blog=blog, tinymce_api_key=current_app.config.get('TINYMCE_API_KEY'))
         blog.slug = new_slug
         blog.content = request.form.get('content')
         blog.is_published = 'is_published' in request.form
@@ -267,7 +267,7 @@ def edit_blog(blog_id):
         flash('Blog post updated!')
         return redirect(url_for('admin.manage_blogs'))
         
-    return render_template('admin/edit_blog.html', legend='Edit Blog Post', blog=blog)
+    return render_template('admin/edit_blog.html', legend='Edit Blog Post', blog=blog, tinymce_api_key=current_app.config.get('TINYMCE_API_KEY'))
 
 @admin.route('/blogs/delete/<int:blog_id>', methods=['POST'])
 def delete_blog(blog_id):
