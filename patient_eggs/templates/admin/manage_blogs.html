@@ -36,8 +36,7 @@
                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                     </form>
                     {% if blog.is_published %}
-                    <!-- We haven't created the public view yet, so leaving href empty for now or linking to # -->
-                    <a href="#" class="btn btn-sm btn-secondary" target="_blank">View</a>
+                    <a href="{{ url_for('main.blog_post', slug=blog.slug) }}" class="btn btn-sm btn-secondary" target="_blank">View</a>
                     {% endif %}
                 </td>
             </tr>
