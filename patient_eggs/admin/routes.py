@@ -242,6 +242,19 @@ def add_blog():
             return render_template('admin/edit_blog.html', legend='Add Blog Post', title=title, content=content, slug=slug, tinymce_api_key=current_app.config.get('TINYMCE_API_KEY'))
 
         blog = BlogPost(title=title, slug=slug, content=content, is_published=is_published)
+        
+        if 'cover_image' in request.files:
+            file = request.files['cover_image']
+            if file and file.filename:
+                filename = secure_filename(file.filename)
+                timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+                filename = f"{timestamp}_{filename}"
+                save_path = os.path.join(current_app.root_path, 'static', 'img', 'blog')
+                if not os.path.exists(save_path):
+                    os.makedirs(save_path)
+                file.save(os.path.join(save_path, filename))
+                blog.cover_image = filename
+
         db.session.add(blog)
         db.session.commit()
         flash('Blog post created!')
@@ -262,6 +275,18 @@ def edit_blog(blog_id):
         blog.slug = new_slug
         blog.content = request.form.get('content')
         blog.is_published = 'is_published' in request.form
+        
+        if 'cover_image' in request.files:
+            file = request.files['cover_image']
+            if file and file.filename:
+                filename = secure_filename(file.filename)
+                timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+                filename = f"{timestamp}_{filename}"
+                save_path = os.path.join(current_app.root_path, 'static', 'img', 'blog')
+                if not os.path.exists(save_path):
+                    os.makedirs(save_path)
+                file.save(os.path.join(save_path, filename))
+                blog.cover_image = filename
         
         db.session.commit()
         flash('Blog post updated!')
