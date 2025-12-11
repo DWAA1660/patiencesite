@@ -36,8 +36,12 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="image_file" class="form-label">Image Filename</label>
-                                <input type="text" class="form-control" id="image_file" name="image_file" value="{{ product.image_file if product else 'default.jpg' }}" placeholder="e.g. chicken.jpg">
-                                <small class="text-muted">Upload images to static/img/ manually for now.</small>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="image_file" name="image_file" value="{{ product.image_file if product else 'default.jpg' }}" placeholder="e.g. chicken.jpg" list="image_suggestions" autocomplete="off">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="selectProductImage()">Select</button>
+                                </div>
+                                <datalist id="image_suggestions"></datalist>
+                                <small class="text-muted">Start typing to see suggestions or use Select to browse.</small>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="display_order" class="form-label">Display Order</label>
