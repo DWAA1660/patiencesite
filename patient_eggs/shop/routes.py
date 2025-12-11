@@ -18,6 +18,11 @@ def hatching_eggs():
     # Assuming we might want to show available weeks here or on detail page
     return render_template('hatching_eggs.html', products=products)
 
+@shop.route('/chicks')
+def chicks():
+    products = Product.query.filter_by(product_type='chick').all()
+    return render_template('chicks.html', products=products)
+
 @shop.route('/product/<int:product_id>')
 def product_detail(product_id):
     product = Product.query.get_or_404(product_id)

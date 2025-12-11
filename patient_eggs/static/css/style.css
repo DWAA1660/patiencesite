@@ -48,6 +48,13 @@
 }
 .btn-fall-3:hover { background-color: #2ecc71; color: white; }
 
+.btn-fall-4 {
+    background-color: #f39c12; /* Orange/Gold */
+    color: white;
+    border: none;
+}
+.btn-fall-4:hover { background-color: #d68910; color: white; }
+
 /* Icon Cards */
 .icon-card {
     background: #fff;
