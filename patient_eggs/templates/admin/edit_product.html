@@ -74,5 +74,21 @@
             document.getElementById('image_file').value = filename;
         });
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Fetch images for autocomplete
+        fetch("{{ url_for('admin.api_media_list') }}")
+            .then(response => response.json())
+            .then(data => {
+                const datalist = document.getElementById('image_suggestions');
+                if(datalist) {
+                    data.images.forEach(img => {
+                        const option = document.createElement('option');
+                        option.value = img.name;
+                        datalist.appendChild(option);
+                    });
+                }
+            });
+    });
 </script>
 {% endblock %}
