@@ -24,6 +24,7 @@ if __name__ == '__main__':
             'about_hero_bg': ('https://via.placeholder.com/1200x300?text=About+Us', 'About Us page header background'),
             'contact_hero_bg': ('https://via.placeholder.com/1200x300?text=Contact+Us', 'Contact Us page header background'),
             'site_logo': ('', 'Website logo displayed in the navbar'),
+            'logo': ('', 'Central logo on Home page'),
             
             # Hero Heights
             'home_hero_height': ('500px', 'Height of the Home page banner'),

@@ -129,3 +129,184 @@
     border-bottom: 5px solid #d35400;
 }
 
+/* Egg Navigation Layout */
+.egg-nav-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    min-height: 450px;
+    margin: 3rem auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.central-logo {
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.9);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 10;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: 8px solid rgba(255,255,255,0.4);
+}
+
+.egg-pos {
+    position: absolute;
+    z-index: 5;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Responsive Layout */
+@media (max-width: 991px) {
+    .egg-nav-container {
+        flex-direction: column;
+        min-height: auto;
+        gap: 20px;
+        padding: 20px 0;
+    }
+    
+    .central-logo {
+        width: 200px;
+        height: 200px;
+        position: relative;
+        margin-bottom: 10px;
+        order: -1; /* Put logo at top on mobile */
+    }
+    
+    .egg-pos {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        transform: none !important;
+        margin: 5px;
+    }
+}
+
+@media (min-width: 992px) {
+    /* Shop Birds - Top Left */
+    .egg-pos-1 {
+        top: 20px;
+        left: 80px;
+        transform: rotate(-15deg);
+    }
+    
+    /* Our Story - Top Right */
+    .egg-pos-2 {
+        top: 20px;
+        right: 80px;
+        transform: rotate(15deg);
+    }
+    
+    /* Hatching Eggs - Bottom Left */
+    .egg-pos-3 {
+        bottom: 40px;
+        left: 20px;
+        transform: rotate(-25deg);
+    }
+    
+    /* Chicks - Bottom Right */
+    .egg-pos-4 {
+        bottom: 40px;
+        right: 20px;
+        transform: rotate(25deg);
+    }
+}
+
+/* Egg Navigation Layout */
+.egg-nav-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    min-height: 450px;
+    margin: 3rem auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.central-logo {
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.9);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 10;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: 8px solid rgba(255,255,255,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.egg-pos {
+    position: absolute;
+    z-index: 5;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Responsive Layout */
+@media (max-width: 991px) {
+    .egg-nav-container {
+        flex-direction: column;
+        min-height: auto;
+        gap: 20px;
+        padding: 20px 0;
+    }
+    
+    .central-logo {
+        width: 200px;
+        height: 200px;
+        position: relative;
+        margin-bottom: 10px;
+        order: -1; /* Put logo at top on mobile */
+    }
+    
+    .egg-pos {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        transform: none !important;
+        margin: 5px;
+    }
+}
+
+@media (min-width: 992px) {
+    /* Shop Birds - Top Left */
+    .egg-pos-1 {
+        top: 20px;
+        left: 80px;
+        transform: rotate(-15deg);
+    }
+    
+    /* Our Story - Top Right */
+    .egg-pos-2 {
+        top: 20px;
+        right: 80px;
+        transform: rotate(15deg);
+    }
+    
+    /* Hatching Eggs - Bottom Left */
+    .egg-pos-3 {
+        bottom: 40px;
+        left: 20px;
+        transform: rotate(-25deg);
+    }
+    
+    /* Chicks - Bottom Right */
+    .egg-pos-4 {
+        bottom: 40px;
+        right: 20px;
+        transform: rotate(25deg);
+    }
+}
+

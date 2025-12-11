@@ -7,12 +7,16 @@
         <h1 class="mb-3 display-3 fw-bold cursive-font">Welcome to Prairie Homestead</h1>
         <h4 class="mb-4">Quality Poultry & Hatching Eggs</h4>
         
-        <!-- Fall Themed Buttons -->
-        <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
-            <a href="{{ url_for('shop.adult_birds') }}" class="btn btn-fall-1 btn-egg">Shop Birds</a>
-            <a href="{{ url_for('shop.hatching_eggs') }}" class="btn btn-fall-2 btn-egg">Hatching Eggs</a>
-            <a href="{{ url_for('shop.chicks') }}" class="btn btn-fall-4 btn-egg">Chicks</a>
-            <a href="{{ url_for('main.about') }}" class="btn btn-fall-3 btn-egg">Our Story</a>
+        <!-- Egg Navigation Layout -->
+        <div class="egg-nav-container">
+            <!-- Central Logo (Editable via 'logo' key in settings) -->
+            <div class="central-logo" style="background-image: url('{{ site_settings.get('logo') if site_settings.get('logo', '').startswith('http') else url_for('static', filename='img/' + site_settings.get('logo', 'default.jpg')) }}');"></div>
+            
+            <!-- Eggs positioned around logo -->
+            <a href="{{ url_for('shop.adult_birds') }}" class="btn btn-fall-1 btn-egg egg-pos egg-pos-1">Shop Birds</a>
+            <a href="{{ url_for('main.about') }}" class="btn btn-fall-3 btn-egg egg-pos egg-pos-2">Our Story</a>
+            <a href="{{ url_for('shop.hatching_eggs') }}" class="btn btn-fall-2 btn-egg egg-pos egg-pos-3">Hatching Eggs</a>
+            <a href="{{ url_for('shop.chicks') }}" class="btn btn-fall-4 btn-egg egg-pos egg-pos-4">Chicks</a>
         </div>
     </div>
 </div>
