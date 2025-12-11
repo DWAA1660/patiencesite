@@ -27,8 +27,15 @@ def create_app(config_class=Config):
     from patient_eggs.admin.routes import admin
 
     app.register_blueprint(main)
-    app.register_blueprint(auth, url_prefix='/auth')
-    app.register_blueprint(shop, url_prefix='/shop')
+    app.register_blueprint(auth)
+    app.register_blueprint(shop)
     app.register_blueprint(admin, url_prefix='/admin')
+
+    # Context Processor for Site Settings
+    from patient_eggs.models import SiteSetting
+    @app.context_processor
+    def inject_site_settings():
+        settings = {s.key: s.value for s in SiteSetting.query.all()}
+        return dict(site_settings=settings)
 
     return app

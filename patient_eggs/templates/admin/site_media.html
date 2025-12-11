@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Site Media & Settings</h2>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <form method="POST">
+                {% for setting in settings %}
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-capitalize">
+                        {{ setting.key.replace('_', ' ') }}
+                    </label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" 
+                               id="setting_{{ setting.key }}" 
+                               name="setting_{{ setting.key }}" 
+                               value="{{ setting.value }}" 
+                               placeholder="Select image or enter value...">
+                        
+                        <!-- Image Select Button -->
+                        <button class="btn btn-outline-secondary" type="button" 
+                                onclick="selectSettingImage('setting_{{ setting.key }}')">
+                            <i class="bi bi-image"></i> Select Image
+                        </button>
+                    </div>
+                    
+                    <!-- Preview if it looks like an image -->
+                    <div class="mt-2" id="preview_setting_{{ setting.key }}">
+                        {% if setting.value and (setting.value.endswith('.jpg') or setting.value.endswith('.png') or setting.value.endswith('.webp')) %}
+                            <div class="d-flex align-items-center">
+                                <span class="small text-muted me-2">Current:</span>
+                                <!-- Check if full URL or local filename -->
+                                {% if setting.value.startswith('http') %}
+                                    <img src="{{ setting.value }}" class="img-thumbnail" style="height: 60px;">
+                                {% else %}
+                                    <img src="{{ url_for('static', filename='img/' + setting.value) }}" class="img-thumbnail" style="height: 60px;">
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">Save Settings</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add New Setting Section -->
+    <div class="card shadow mt-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">Add New Setting</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="row">
+                    <div class="col-md-5 mb-3">
+                        <label for="new_setting_key" class="form-label">New Key Name</label>
+                        <input type="text" class="form-control" id="new_setting_key" name="new_setting_key" placeholder="e.g. holiday_banner_bg" required>
+                        <div class="form-text">Use lowercase and underscores (e.g. my_new_setting)</div>
+                    </div>
+                    <div class="col-md-7 mb-3">
+                        <label for="new_setting_value" class="form-label">Initial Value</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="new_setting_value" name="new_setting_value" placeholder="Value or Image Filename">
+                            <button class="btn btn-outline-secondary" type="button" onclick="selectSettingImage('new_setting_value')">
+                                <i class="bi bi-image"></i> Select Image
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">Add Setting</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% include 'admin/_image_selector.html' %}
+
+<script>
+    function selectSettingImage(inputId) {
+        window.openImageSelector(function(filename, url) {
+            document.getElementById(inputId).value = filename;
+            
+            // Update preview logic could be added here for immediate feedback,
+            // but saving the form refreshes the page anyway which handles the preview.
+            // Let's add a simple preview update for UX.
+            const previewId = 'preview_' + inputId;
+            const previewDiv = document.getElementById(previewId);
+            if(previewDiv) {
+                previewDiv.innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <span class="small text-muted me-2">New Selection:</span>
+                        <img src="${url}" class="img-thumbnail" style="height: 60px;">
+                    </div>
+                `;
+            }
+        });
+    }
+</script>
+{% endblock %}

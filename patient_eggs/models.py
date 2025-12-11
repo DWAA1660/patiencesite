@@ -116,3 +116,24 @@ class BlogPost(db.Model):
     def __repr__(self):
         return f"BlogPost('{self.title}', '{self.created_at}')"
 
+class SiteSetting(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    key = db.Column(db.String(50), unique=True, nullable=False)
+    value = db.Column(db.Text)
+    description = db.Column(db.String(200))
+
+    @staticmethod
+    def get_value(key, default=None):
+        setting = SiteSetting.query.filter_by(key=key).first()
+        return setting.value if setting else default
+    
+    @staticmethod
+    def set_value(key, value):
+        setting = SiteSetting.query.filter_by(key=key).first()
+        if setting:
+            setting.value = value
+        else:
+            setting = SiteSetting(key=key, value=value)
+            db.session.add(setting)
+        db.session.commit()
+

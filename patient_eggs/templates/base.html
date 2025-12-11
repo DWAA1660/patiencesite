@@ -10,11 +10,17 @@
     <script src="https://js.stripe.com/v3/"></script>
     {% block head %}{% endblock %}
 </head>
-<body>
+<body style="{% if site_settings.get('site_background') %}background-image: url('{{ site_settings['site_background'] if site_settings['site_background'].startswith('http') else url_for('static', filename='img/' + site_settings['site_background']) }}'); background-attachment: fixed; background-size: cover;{% endif %}">
     <!-- Sticky Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
         <div class="container">
-            <a class="navbar-brand" href="{{ url_for('main.home') }}">Prairie Homestead</a>
+            <a class="navbar-brand" href="{{ url_for('main.home') }}">
+                {% if site_settings.get('site_logo') %}
+                    <img src="{{ site_settings['site_logo'] if site_settings['site_logo'].startswith('http') else url_for('static', filename='img/' + site_settings['site_logo']) }}" alt="Prairie Homestead" height="40">
+                {% else %}
+                    Prairie Homestead
+                {% endif %}
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>

@@ -433,6 +433,37 @@ def delete_media():
         
     return redirect(url_for('admin.media_manager'))
 
+@admin.route('/site-media', methods=['GET', 'POST'])
+def manage_site_media():
+    if request.method == 'POST':
+        # Handle New Setting Creation
+        new_key = request.form.get('new_setting_key')
+        if new_key:
+            # Clean key: lowercase, underscores only
+            clean_key = new_key.strip().lower().replace(' ', '_')
+            if clean_key and not SiteSetting.query.filter_by(key=clean_key).first():
+                new_value = request.form.get('new_setting_value', '')
+                SiteSetting.set_value(clean_key, new_value)
+                flash(f'New setting "{clean_key}" added.')
+            elif SiteSetting.query.filter_by(key=clean_key).first():
+                flash(f'Setting "{clean_key}" already exists.', 'warning')
+
+        # Handle Updates
+        for key, value in request.form.items():
+            if key.startswith('setting_'):
+                setting_key = key.replace('setting_', '')
+                SiteSetting.set_value(setting_key, value)
+        
+        if not new_key: # Only show "updated" if we weren't just creating one (though we do both)
+             flash('Site settings updated successfully.')
+             
+        return redirect(url_for('admin.manage_site_media'))
+    
+    settings = SiteSetting.query.all()
+    # Define known settings to ensure they exist or are categorized if needed
+    # For now, just listing what's in DB
+    return render_template('admin/site_media.html', settings=settings)
+
 @admin.route('/api/media-list')
 def api_media_list():
     img_dir = os.path.join(current_app.root_path, 'static', 'img')
