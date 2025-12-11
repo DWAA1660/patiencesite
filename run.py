@@ -16,29 +16,35 @@ if __name__ == '__main__':
         
         # Seed Site Settings
         defaults = {
-            'site_background': 'default_bg.jpg', 
-            'home_hero_bg': 'https://via.placeholder.com/1200x400',
-            'chicks_hero_bg': 'https://via.placeholder.com/1200x300?text=Chicks',
-            'adult_hero_bg': 'https://via.placeholder.com/1200x300?text=Adult+Birds',
-            'eggs_hero_bg': 'https://via.placeholder.com/1200x300?text=Hatching+Eggs',
-            'about_hero_bg': 'https://via.placeholder.com/1200x300?text=About+Us',
-            'contact_hero_bg': 'https://via.placeholder.com/1200x300?text=Contact+Us',
-            'site_logo': '', # Empty default, will fall back to text
+            'site_background': ('default_bg.jpg', 'Global site background image pattern'), 
+            'home_hero_bg': ('https://via.placeholder.com/1200x400', 'Home page main banner background'),
+            'chicks_hero_bg': ('https://via.placeholder.com/1200x300?text=Chicks', 'Chicks page header background'),
+            'adult_hero_bg': ('https://via.placeholder.com/1200x300?text=Adult+Birds', 'Adult birds page header background'),
+            'eggs_hero_bg': ('https://via.placeholder.com/1200x300?text=Hatching+Eggs', 'Hatching eggs page header background'),
+            'about_hero_bg': ('https://via.placeholder.com/1200x300?text=About+Us', 'About Us page header background'),
+            'contact_hero_bg': ('https://via.placeholder.com/1200x300?text=Contact+Us', 'Contact Us page header background'),
+            'site_logo': ('', 'Website logo displayed in the navbar'),
             
             # Hero Heights
-            'home_hero_height': '500px',
-            'chicks_hero_height': '300px',
-            'adult_hero_height': '300px',
-            'eggs_hero_height': '300px',
-            'about_hero_height': '300px',
-            'contact_hero_height': '300px'
+            'home_hero_height': ('500px', 'Height of the Home page banner'),
+            'chicks_hero_height': ('300px', 'Height of the Chicks page banner'),
+            'adult_hero_height': ('300px', 'Height of the Adult Birds page banner'),
+            'eggs_hero_height': ('300px', 'Height of the Hatching Eggs page banner'),
+            'about_hero_height': ('300px', 'Height of the About Us page banner'),
+            'contact_hero_height': ('300px', 'Height of the Contact Us page banner')
         }
 
-        for key, val in defaults.items():
-            if not SiteSetting.query.filter_by(key=key).first():
+        for key, (val, desc) in defaults.items():
+            setting = SiteSetting.query.filter_by(key=key).first()
+            if not setting:
                 print(f"Seeding {key}...")
-                setting = SiteSetting(key=key, value=val)
+                setting = SiteSetting(key=key, value=val, description=desc)
                 db.session.add(setting)
+            elif not setting.description:
+                # Update description if missing for existing keys
+                print(f"Updating description for {key}...")
+                setting.description = desc
+                
         db.session.commit()
 
         # Seed Products

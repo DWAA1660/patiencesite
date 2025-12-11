@@ -10,7 +10,73 @@
     <div class="card shadow">
         <div class="card-body">
             <form method="POST">
-                {% for setting in settings %}
+                <!-- Grouped Hero Sections -->
+                {% if groups %}
+                {% for group in groups %}
+                <div class="card mb-4 border-light shadow-sm">
+                    <div class="card-header fw-bold bg-light">{{ group.title }}</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Background Image -->
+                            <div class="col-md-8">
+                                {% if group.bg %}
+                                <label class="form-label small text-muted">Background Image</label>
+                                <div class="input-group mb-2">
+                                    <input type="text" class="form-control" 
+                                           id="setting_{{ group.bg.key }}" 
+                                           name="setting_{{ group.bg.key }}" 
+                                           value="{{ group.bg.value }}" 
+                                           placeholder="Select image...">
+                                    <button class="btn btn-outline-secondary" type="button" 
+                                            onclick="selectSettingImage('setting_{{ group.bg.key }}')">
+                                        <i class="bi bi-image"></i> Select
+                                    </button>
+                                </div>
+                                <!-- Description Field -->
+                                <input type="text" class="form-control form-control-sm mb-2 text-muted" 
+                                       name="description_{{ group.bg.key }}" 
+                                       value="{{ group.bg.description or '' }}" 
+                                       placeholder="Description (e.g. Home page banner)">
+                                
+                                <!-- Preview -->
+                                <div id="preview_setting_{{ group.bg.key }}">
+                                    {% if group.bg.value and (group.bg.value.endswith('.jpg') or group.bg.value.endswith('.png') or group.bg.value.endswith('.webp')) %}
+                                        <div class="d-flex align-items-center mt-2">
+                                            {% if group.bg.value.startswith('http') %}
+                                                <img src="{{ group.bg.value }}" class="img-thumbnail w-100" style="height: 120px; object-fit: cover;">
+                                            {% else %}
+                                                <img src="{{ url_for('static', filename='img/' + group.bg.value) }}" class="img-thumbnail w-100" style="height: 120px; object-fit: cover;">
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Height -->
+                            <div class="col-md-4">
+                                {% if group.height %}
+                                <label class="form-label small text-muted">Banner Height</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" 
+                                           id="setting_{{ group.height.key }}" 
+                                           name="setting_{{ group.height.key }}" 
+                                           value="{{ group.height.value }}" 
+                                           placeholder="e.g. 300px">
+                                </div>
+                                <div class="form-text small">Use px, vh, or %</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                <!-- Misc Settings -->
+                {% if misc_settings %}
+                <h4 class="mb-3 mt-4">Other Settings</h4>
+                {% for setting in misc_settings %}
                 <div class="mb-4">
                     <label class="form-label fw-bold text-capitalize">
                         {{ setting.key.replace('_', ' ') }}
@@ -22,19 +88,22 @@
                                value="{{ setting.value }}" 
                                placeholder="Select image or enter value...">
                         
-                        <!-- Image Select Button -->
                         <button class="btn btn-outline-secondary" type="button" 
                                 onclick="selectSettingImage('setting_{{ setting.key }}')">
                             <i class="bi bi-image"></i> Select Image
                         </button>
                     </div>
                     
-                    <!-- Preview if it looks like an image -->
+                    <!-- Description Field -->
+                    <input type="text" class="form-control form-control-sm mt-2 text-muted" 
+                           name="description_{{ setting.key }}" 
+                           value="{{ setting.description or '' }}" 
+                           placeholder="Description">
+                    
                     <div class="mt-2" id="preview_setting_{{ setting.key }}">
                         {% if setting.value and (setting.value.endswith('.jpg') or setting.value.endswith('.png') or setting.value.endswith('.webp')) %}
                             <div class="d-flex align-items-center">
                                 <span class="small text-muted me-2">Current:</span>
-                                <!-- Check if full URL or local filename -->
                                 {% if setting.value.startswith('http') %}
                                     <img src="{{ setting.value }}" class="img-thumbnail" style="height: 60px;">
                                 {% else %}
@@ -45,8 +114,9 @@
                     </div>
                 </div>
                 {% endfor %}
+                {% endif %}
 
-                <div class="d-grid">
+                <div class="d-grid mt-4">
                     <button type="submit" class="btn btn-primary btn-lg">Save Settings</button>
                 </div>
             </form>
@@ -68,12 +138,13 @@
                     </div>
                     <div class="col-md-7 mb-3">
                         <label for="new_setting_value" class="form-label">Initial Value</label>
-                        <div class="input-group">
+                        <div class="input-group mb-2">
                             <input type="text" class="form-control" id="new_setting_value" name="new_setting_value" placeholder="Value or Image Filename">
                             <button class="btn btn-outline-secondary" type="button" onclick="selectSettingImage('new_setting_value')">
                                 <i class="bi bi-image"></i> Select Image
                             </button>
                         </div>
+                        <input type="text" class="form-control form-control-sm" id="new_setting_description" name="new_setting_description" placeholder="Description (optional)">
                     </div>
                 </div>
                 <button type="submit" class="btn btn-success">Add Setting</button>

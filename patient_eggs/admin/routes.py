@@ -443,7 +443,13 @@ def manage_site_media():
             clean_key = new_key.strip().lower().replace(' ', '_')
             if clean_key and not SiteSetting.query.filter_by(key=clean_key).first():
                 new_value = request.form.get('new_setting_value', '')
-                SiteSetting.set_value(clean_key, new_value)
+                new_desc = request.form.get('new_setting_description', '')
+                
+                # Create manually to include description
+                setting = SiteSetting(key=clean_key, value=new_value, description=new_desc)
+                db.session.add(setting)
+                db.session.commit()
+                
                 flash(f'New setting "{clean_key}" added.')
             elif SiteSetting.query.filter_by(key=clean_key).first():
                 flash(f'Setting "{clean_key}" already exists.', 'warning')
@@ -453,16 +459,67 @@ def manage_site_media():
             if key.startswith('setting_'):
                 setting_key = key.replace('setting_', '')
                 SiteSetting.set_value(setting_key, value)
+            elif key.startswith('description_'):
+                setting_key = key.replace('description_', '')
+                setting = SiteSetting.query.filter_by(key=setting_key).first()
+                if setting:
+                    setting.description = value
+                    # set_value commits, but here we just modify object attached to session
+                    # We need to make sure we commit eventually. 
+                    # set_value commits immediately, so if we update value then description, 
+                    # we might need an explicit commit for description if set_value wasn't called for this key (unlikely if form submits both).
+                    # But SiteSetting.set_value commits inside itself.
+                    # Let's just do a final commit at the end to be sure for descriptions.
+        
+        db.session.commit()
         
         if not new_key: # Only show "updated" if we weren't just creating one (though we do both)
              flash('Site settings updated successfully.')
              
         return redirect(url_for('admin.manage_site_media'))
     
-    settings = SiteSetting.query.all()
-    # Define known settings to ensure they exist or are categorized if needed
-    # For now, just listing what's in DB
-    return render_template('admin/site_media.html', settings=settings)
+    all_settings = SiteSetting.query.all()
+    
+    # Organize settings into groups for easier editing
+    groups = []
+    processed_ids = set()
+
+    def find_setting(key):
+        for s in all_settings:
+            if s.key == key:
+                return s
+        return None
+
+    # Define known hero sections
+    hero_sections = [
+        {'title': 'Home Page Hero', 'prefix': 'home_hero'},
+        {'title': 'Chicks Page Hero', 'prefix': 'chicks_hero'},
+        {'title': 'Adult Birds Page Hero', 'prefix': 'adult_hero'},
+        {'title': 'Hatching Eggs Page Hero', 'prefix': 'eggs_hero'},
+        {'title': 'About Page Hero', 'prefix': 'about_hero'},
+        {'title': 'Contact Page Hero', 'prefix': 'contact_hero'},
+    ]
+
+    for section in hero_sections:
+        bg_key = f"{section['prefix']}_bg"
+        height_key = f"{section['prefix']}_height"
+        
+        bg_setting = find_setting(bg_key)
+        height_setting = find_setting(height_key)
+        
+        if bg_setting or height_setting:
+            groups.append({
+                'title': section['title'],
+                'bg': bg_setting,
+                'height': height_setting
+            })
+            if bg_setting: processed_ids.add(bg_setting.id)
+            if height_setting: processed_ids.add(height_setting.id)
+
+    # Collect any settings not in the groups
+    misc_settings = [s for s in all_settings if s.id not in processed_ids]
+
+    return render_template('admin/site_media.html', groups=groups, misc_settings=misc_settings)
 
 @admin.route('/api/media-list')
 def api_media_list():
