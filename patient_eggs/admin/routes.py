@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app
 from flask_login import login_required, current_user
-from patient_eggs.models import Product, InventoryEggWeekly, Order, GalleryImage, BlogPost, InventoryAdult, db
+from patient_eggs.models import Product, InventoryEggWeekly, Order, GalleryImage, BlogPost, InventoryAdult, SiteSetting, db
 from werkzeug.utils import secure_filename
 import json
 import os
