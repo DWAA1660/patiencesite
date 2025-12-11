@@ -2,7 +2,7 @@
 
 {% block content %}
 <!-- Adult Birds Hero -->
-<div class="hero p-5 text-center bg-image" style="background-image: url('{{ site_settings['adult_hero_bg'] if site_settings.get('adult_hero_bg', '').startswith('http') else url_for('static', filename='img/' + site_settings.get('adult_hero_bg', 'default_adult.jpg')) }}'); height: 300px; background-size: cover;">
+<div class="hero p-5 text-center bg-image" style="background-image: url('{{ site_settings['adult_hero_bg'] if site_settings.get('adult_hero_bg', '').startswith('http') else url_for('static', filename='img/' + site_settings.get('adult_hero_bg', 'default_adult.jpg')) }}'); height: {{ site_settings.get('adult_hero_height', '300px') }}; background-size: cover;">
     <div class="text-white w-100">
         <h1 class="display-4 fw-bold">Adult Birds</h1>
         <p class="lead">Mature, healthy birds ready for your coop.</p>

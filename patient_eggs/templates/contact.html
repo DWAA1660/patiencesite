@@ -2,7 +2,7 @@
 
 {% block content %}
 <!-- Contact Hero -->
-<div class="hero p-5 text-center bg-image" style="background-image: url('{{ site_settings['contact_hero_bg'] if site_settings.get('contact_hero_bg', '').startswith('http') else url_for('static', filename='img/' + site_settings.get('contact_hero_bg', 'default_contact.jpg')) }}'); height: 300px; background-size: cover;">
+<div class="hero p-5 text-center bg-image" style="background-image: url('{{ site_settings['contact_hero_bg'] if site_settings.get('contact_hero_bg', '').startswith('http') else url_for('static', filename='img/' + site_settings.get('contact_hero_bg', 'default_contact.jpg')) }}'); height: {{ site_settings.get('contact_hero_height', '300px') }}; background-size: cover;">
     <div class="text-white w-100">
         <h1 class="display-4 fw-bold">Contact Us</h1>
         <p class="lead">We'd love to hear from you.</p>

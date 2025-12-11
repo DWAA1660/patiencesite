@@ -22,7 +22,15 @@ with app.app_context():
         'eggs_hero_bg': 'https://via.placeholder.com/1200x300?text=Hatching+Eggs',
         'about_hero_bg': 'https://via.placeholder.com/1200x300?text=About+Us',
         'contact_hero_bg': 'https://via.placeholder.com/1200x300?text=Contact+Us',
-        'site_logo': '' # Empty default, will fall back to text
+        'site_logo': '', # Empty default, will fall back to text
+        
+        # Hero Heights
+        'home_hero_height': '500px',
+        'chicks_hero_height': '300px',
+        'adult_hero_height': '300px',
+        'eggs_hero_height': '300px',
+        'about_hero_height': '300px',
+        'contact_hero_height': '300px'
     }
 
     for key, val in defaults.items():

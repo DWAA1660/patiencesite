@@ -2,7 +2,7 @@
 
 {% block content %}
 <!-- Chicks Hero -->
-<div class="hero p-5 text-center bg-image" style="background-image: url('{{ site_settings['chicks_hero_bg'] if site_settings.get('chicks_hero_bg', '').startswith('http') else url_for('static', filename='img/' + site_settings.get('chicks_hero_bg', 'default_chicks.jpg')) }}'); height: 300px; background-size: cover;">
+<div class="hero p-5 text-center bg-image" style="background-image: url('{{ site_settings['chicks_hero_bg'] if site_settings.get('chicks_hero_bg', '').startswith('http') else url_for('static', filename='img/' + site_settings.get('chicks_hero_bg', 'default_chicks.jpg')) }}'); height: {{ site_settings.get('chicks_hero_height', '300px') }}; background-size: cover;">
     <div class="text-white w-100">
         <h1 class="display-4 fw-bold">Chicks</h1>
         <p class="lead">Start your flock with our healthy, vigorous chicks.</p>
