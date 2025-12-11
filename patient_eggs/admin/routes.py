@@ -243,17 +243,21 @@ def add_blog():
 
         blog = BlogPost(title=title, slug=slug, content=content, is_published=is_published)
         
-        if 'cover_image' in request.files:
-            file = request.files['cover_image']
-            if file and file.filename:
-                filename = secure_filename(file.filename)
-                timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-                filename = f"{timestamp}_{filename}"
-                save_path = os.path.join(current_app.root_path, 'static', 'img', 'blog')
-                if not os.path.exists(save_path):
-                    os.makedirs(save_path)
-                file.save(os.path.join(save_path, filename))
-                blog.cover_image = filename
+        # Handle Cover Image (Text selection or File upload)
+        # Priority: File Upload > Text Selection > Default (if new)
+        if 'cover_image_file' in request.files and request.files['cover_image_file'].filename:
+            file = request.files['cover_image_file']
+            filename = secure_filename(file.filename)
+            timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+            filename = f"{timestamp}_{filename}"
+            # Save to main img folder
+            save_path = os.path.join(current_app.root_path, 'static', 'img')
+            if not os.path.exists(save_path):
+                os.makedirs(save_path)
+            file.save(os.path.join(save_path, filename))
+            blog.cover_image = filename
+        elif request.form.get('cover_image'):
+            blog.cover_image = request.form.get('cover_image')
 
         db.session.add(blog)
         db.session.commit()
@@ -276,17 +280,20 @@ def edit_blog(blog_id):
         blog.content = request.form.get('content')
         blog.is_published = 'is_published' in request.form
         
-        if 'cover_image' in request.files:
-            file = request.files['cover_image']
-            if file and file.filename:
-                filename = secure_filename(file.filename)
-                timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-                filename = f"{timestamp}_{filename}"
-                save_path = os.path.join(current_app.root_path, 'static', 'img', 'blog')
-                if not os.path.exists(save_path):
-                    os.makedirs(save_path)
-                file.save(os.path.join(save_path, filename))
-                blog.cover_image = filename
+        # Handle Cover Image
+        if 'cover_image_file' in request.files and request.files['cover_image_file'].filename:
+            file = request.files['cover_image_file']
+            filename = secure_filename(file.filename)
+            timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+            filename = f"{timestamp}_{filename}"
+            # Save to main img folder
+            save_path = os.path.join(current_app.root_path, 'static', 'img')
+            if not os.path.exists(save_path):
+                os.makedirs(save_path)
+            file.save(os.path.join(save_path, filename))
+            blog.cover_image = filename
+        elif request.form.get('cover_image'):
+             blog.cover_image = request.form.get('cover_image')
         
         db.session.commit()
         flash('Blog post updated!')
@@ -317,13 +324,194 @@ def upload_blog_image():
         filename = f"{timestamp}_{filename}"
         
         from flask import current_app
-        save_path = os.path.join(current_app.root_path, 'static', 'img', 'blog')
+        # Use main img folder as requested
+        save_path = os.path.join(current_app.root_path, 'static', 'img')
         if not os.path.exists(save_path):
             os.makedirs(save_path)
             
         file.save(os.path.join(save_path, filename))
         
         # Return URL
-        url = url_for('static', filename=f'img/blog/{filename}')
+        url = url_for('static', filename=f'img/{filename}')
         return {'location': url} # TinyMCE expects 'location'
+
+# --- Media Manager ---
+@admin.route('/media')
+def media_manager():
+    return render_template('admin/media_manager.html')
+
+@admin.route('/media/upload', methods=['POST'])
+def upload_media():
+    if 'file' not in request.files:
+        flash('No file part')
+        return redirect(url_for('admin.media_manager'))
+    
+    files = request.files.getlist('file')
+    upload_dir = os.path.join(current_app.root_path, 'static', 'img')
+    
+    saved_count = 0
+    for file in files:
+        if file and file.filename:
+            filename = secure_filename(file.filename)
+            # Avoid overwriting
+            base, ext = os.path.splitext(filename)
+            counter = 1
+            while os.path.exists(os.path.join(upload_dir, filename)):
+                filename = f"{base}_{counter}{ext}"
+                counter += 1
+            
+            file.save(os.path.join(upload_dir, filename))
+            saved_count += 1
+            
+    flash(f'{saved_count} images uploaded successfully.')
+    return redirect(url_for('admin.media_manager'))
+
+@admin.route('/media/rename', methods=['POST'])
+def rename_media():
+    old_name = request.form.get('old_name')
+    new_name = request.form.get('new_name')
+    
+    if not old_name or not new_name:
+        flash('Invalid filenames.')
+        return redirect(url_for('admin.media_manager'))
+        
+    # Security check - ensure we stay in static/img
+    if '..' in old_name or '..' in new_name or '/' in old_name or '/' in new_name:
+        flash('Invalid filename security.')
+        return redirect(url_for('admin.media_manager'))
+        
+    img_dir = os.path.join(current_app.root_path, 'static', 'img')
+    old_path = os.path.join(img_dir, old_name)
+    
+    # Ensure extension is preserved or added
+    _, old_ext = os.path.splitext(old_name)
+    _, new_ext = os.path.splitext(new_name)
+    if not new_ext:
+        new_name += old_ext
+        
+    new_path = os.path.join(img_dir, secure_filename(new_name))
+    
+    if not os.path.exists(old_path):
+        flash('Original file not found.')
+    elif os.path.exists(new_path):
+        flash('A file with that name already exists.')
+    else:
+        try:
+            os.rename(old_path, new_path)
+            # TODO: Update DB references? That's risky/complex. 
+            # For now, just warn user or let them update manually.
+            # Ideally we'd update Product, GalleryImage, etc.
+            _update_db_references(old_name, os.path.basename(new_path))
+            flash(f'Renamed {old_name} to {os.path.basename(new_path)} and updated references.')
+        except Exception as e:
+            flash(f'Error renaming file: {str(e)}')
+            
+    return redirect(url_for('admin.media_manager'))
+
+@admin.route('/media/delete', methods=['POST'])
+def delete_media():
+    filename = request.form.get('filename')
+    if not filename:
+        flash('No filename provided.')
+        return redirect(url_for('admin.media_manager'))
+        
+    if '..' in filename or '/' in filename:
+        flash('Invalid filename.')
+        return redirect(url_for('admin.media_manager'))
+        
+    img_dir = os.path.join(current_app.root_path, 'static', 'img')
+    file_path = os.path.join(img_dir, filename)
+    
+    if os.path.exists(file_path):
+        try:
+            os.remove(file_path)
+            flash(f'Deleted {filename}.')
+        except Exception as e:
+            flash(f'Error deleting file: {str(e)}')
+    else:
+        flash('File not found.')
+        
+    return redirect(url_for('admin.media_manager'))
+
+@admin.route('/api/media-list')
+def api_media_list():
+    img_dir = os.path.join(current_app.root_path, 'static', 'img')
+    images = []
+    
+    # 1. Get usage data
+    usage = _get_image_usage()
+    
+    # 2. List files
+    if os.path.exists(img_dir):
+        for f in os.listdir(img_dir):
+            if f.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg')):
+                images.append({
+                    'name': f,
+                    'url': url_for('static', filename=f'img/{f}'),
+                    'usage': usage.get(f, [])
+                })
+                
+    return {'images': images}
+
+def _get_image_usage():
+    """Scans DB to find where images are used."""
+    usage = {}
+    
+    # Products
+    products = Product.query.all()
+    for p in products:
+        if p.image_file:
+            if p.image_file not in usage: usage[p.image_file] = []
+            usage[p.image_file].append(f'Product: {p.name}')
+            
+    # Gallery
+    gallery = GalleryImage.query.all()
+    for g in gallery:
+        if g.image_file:
+            if g.image_file not in usage: usage[g.image_file] = []
+            usage[g.image_file].append(f'Gallery: {g.caption or "Image"}')
+            
+    # Blog Cover
+    blogs = BlogPost.query.all()
+    for b in blogs:
+        if b.cover_image:
+            # Blog images might be in subfolder 'blog/', check how we stored them. 
+            # If they are just filenames, we might need to handle paths.
+            # Assuming main img folder for now based on user request "one directory".
+            # But currently blog images are saved to static/img/blog.
+            # We should probably check if the filename matches.
+            name = b.cover_image
+            if name not in usage: usage[name] = []
+            usage[name].append(f'Blog Cover: {b.title}')
+            
+        # Blog Content (basic string search)
+        # This is expensive for many blogs but fine for small scale
+        if b.content:
+            for img_name in usage.keys():
+                # Check if image name appears in content
+                if img_name in b.content:
+                     if f'Blog Post: {b.title}' not in usage[img_name]:
+                         usage[img_name].append(f'Blog Content: {b.title}')
+                         
+    return usage
+
+def _update_db_references(old_name, new_name):
+    """Updates DB references when a file is renamed."""
+    # Products
+    products = Product.query.filter_by(image_file=old_name).all()
+    for p in products:
+        p.image_file = new_name
+        
+    # Gallery
+    gallery = GalleryImage.query.filter_by(image_file=old_name).all()
+    for g in gallery:
+        g.image_file = new_name
+        
+    # Blog Cover
+    blogs = BlogPost.query.filter_by(cover_image=old_name).all()
+    for b in blogs:
+        b.cover_image = new_name
+        
+    db.session.commit()
+
 

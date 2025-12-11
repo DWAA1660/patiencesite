@@ -16,15 +16,30 @@
         </div>
 
         <div class="mb-3">
-            <label for="cover_image" class="form-label">Cover Image</label>
+            <label class="form-label">Cover Image</label>
             {% if blog and blog.cover_image %}
             <div class="mb-2">
-                <img src="{{ url_for('static', filename='img/blog/' + blog.cover_image) }}" alt="Current Cover Image" style="max-height: 200px;">
+                <!-- Ensure we look in root img folder first (new system), fallback to blog/ if needed (legacy) -->
+                <!-- Ideally all are moved to root, but let's assume root for now based on new logic -->
+                <img src="{{ url_for('static', filename='img/' + blog.cover_image) }}" alt="Current Cover Image" style="max-height: 200px;" 
+                     onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/blog/' + blog.cover_image) }}';">
                 <p class="text-muted small">Current: {{ blog.cover_image }}</p>
             </div>
             {% endif %}
-            <input type="file" class="form-control" id="cover_image" name="cover_image">
-            <div class="form-text">Leave blank to keep current image (if editing).</div>
+            
+            <div class="row g-2">
+                <div class="col-md-6">
+                    <label class="small text-muted">Select Existing</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="cover_image" name="cover_image" value="{{ blog.cover_image if blog else '' }}" placeholder="Select from library...">
+                        <button class="btn btn-outline-secondary" type="button" onclick="selectCoverImage()">Select</button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="small text-muted">Or Upload New</label>
+                    <input type="file" class="form-control" id="cover_image_file" name="cover_image_file">
+                </div>
+            </div>
         </div>
 
         <div class="form-check mb-3">
@@ -44,42 +59,34 @@
     </form>
 </div>
 
+{% include 'admin/_image_selector.html' %}
+
 <script src="https://cdn.tiny.cloud/1/{{ tinymce_api_key or 'no-api-key' }}/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
+    // Cover Image Selector
+    function selectCoverImage() {
+        window.openImageSelector(function(filename, url) {
+            document.getElementById('cover_image').value = filename;
+        });
+    }
+
+    // TinyMCE Init
     tinymce.init({
         selector: '#editor',
         plugins: 'image link lists table media code',
         toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image media | code',
-        images_upload_url: "{{ url_for('admin.upload_blog_image') }}",
+        // We don't need automatic uploads if we select from library, but kept for drag/drop if supported later
+        images_upload_url: "{{ url_for('admin.upload_blog_image') }}", 
         automatic_uploads: true,
         file_picker_types: 'image',
         height: 500,
-        /* and here's our custom image picker*/
+        
+        /* Custom Image Picker using our Media Manager */
         file_picker_callback: function (cb, value, meta) {
-            var input = document.createElement('input');
-            input.setAttribute('type', 'file');
-            input.setAttribute('accept', 'image/*');
-            input.onchange = function () {
-                var file = this.files[0];
-                var reader = new FileReader();
-                reader.onload = function () {
-                    /*
-                      Note: Now we need to register the blob in TinyMCEs image blob
-                      registry. In the next release this part hopefully won't be
-                      necessary, as we are looking to handle it internally.
-                    */
-                    var id = 'blobid' + (new Date()).getTime();
-                    var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
-                    var base64 = reader.result.split(',')[1];
-                    var blobInfo = blobCache.create(id, file, base64);
-                    blobCache.add(blobInfo);
-
-                    /* call the callback and populate the Title field with the file name */
-                    cb(blobInfo.blobUri(), { title: file.name });
-                };
-                reader.readAsDataURL(file);
-            };
-            input.click();
+            window.openImageSelector(function(filename, url) {
+                // Provide file and title for the image dialog
+                cb(url, { title: filename });
+            });
         }
     });
 </script>

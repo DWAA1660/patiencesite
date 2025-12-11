@@ -1,4 +1,37 @@
 /* Custom Styles */
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+.cursive-font {
+    font-family: 'Great Vibes', 'Brush Script MT', 'Comic Sans MS', cursive;
+    font-weight: 400 !important;
+    font-size: 4rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3); /* Help readability against background */
+}
+
+/* Egg Shaped Buttons */
+.btn-egg {
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    padding: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;       /* Fixed width */
+    height: 150px;      /* Taller than wide for standing egg */
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    margin: 10px;
+    white-space: normal; /* Allow text to wrap */
+    line-height: 1.2;
+    font-size: 1.1rem;
+}
+
+.btn-egg:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
 
 .hero {
     background-position: center;

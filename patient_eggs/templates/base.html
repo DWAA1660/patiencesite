@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prairie Homestead</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=3">
     <script src="https://js.stripe.com/v3/"></script>
     {% block head %}{% endblock %}
 </head>
@@ -24,7 +25,7 @@
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('main.contact') }}">Contact</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('main.blog_index') }}">Blog</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('shop.adult_birds') }}">Adult Birds</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('shop.chicks') }}">Day Old Chicks</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('shop.chicks') }}">Chicks</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('shop.hatching_eggs') }}">Hatching Eggs</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('shop.cart') }}">Cart</a></li>
                     {% if current_user.is_authenticated %}

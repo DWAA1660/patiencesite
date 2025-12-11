@@ -1,0 +1,93 @@
+<!-- Image Selector Modal -->
+<div class="modal fade" id="imageSelectorModal" tabindex="-1" aria-hidden="true" style="z-index: 1060;"> <!-- High z-index to sit above other modals/TinyMCE -->
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <input type="text" id="selectorSearch" class="form-control" placeholder="Search images...">
+                </div>
+                
+                <div id="selectorGrid" class="row g-3">
+                    <div class="col-12 text-center">Loading...</div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <div>
+                     <a href="{{ url_for('admin.media_manager') }}" target="_blank" class="btn btn-sm btn-outline-secondary">Manage Media <i class="bi bi-box-arrow-up-right"></i></a>
+                </div>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const modalEl = document.getElementById('imageSelectorModal');
+        const modal = new bootstrap.Modal(modalEl);
+        const grid = document.getElementById('selectorGrid');
+        const searchInput = document.getElementById('selectorSearch');
+        let allImages = [];
+        let currentCallback = null; // Function to call when image selected
+
+        // Global function to open selector
+        window.openImageSelector = function(callback) {
+            currentCallback = callback;
+            modal.show();
+            loadImages();
+        };
+
+        function loadImages() {
+            if (allImages.length > 0) return; // Already loaded
+
+            fetch("{{ url_for('admin.api_media_list') }}")
+                .then(r => r.json())
+                .then(data => {
+                    allImages = data.images;
+                    renderGrid(allImages);
+                });
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = allImages.filter(img => img.name.toLowerCase().includes(term));
+            renderGrid(filtered);
+        });
+
+        function renderGrid(images) {
+            grid.innerHTML = '';
+            if (images.length === 0) {
+                grid.innerHTML = '<div class="col-12 text-center text-muted">No images found.</div>';
+                return;
+            }
+
+            images.forEach(img => {
+                const col = document.createElement('div');
+                col.className = 'col-4 col-md-3';
+                col.innerHTML = `
+                    <div class="card h-100 shadow-sm image-option" style="cursor: pointer;">
+                        <div class="ratio ratio-1x1">
+                            <img src="${img.url}" class="card-img-top object-fit-cover" loading="lazy" style="object-fit: cover;">
+                        </div>
+                        <div class="card-body p-1 text-center">
+                            <small class="text-truncate d-block" style="font-size: 0.75rem;">${img.name}</small>
+                        </div>
+                    </div>
+                `;
+                
+                col.querySelector('.image-option').addEventListener('click', () => {
+                    if (currentCallback) {
+                        currentCallback(img.name, img.url);
+                    }
+                    modal.hide();
+                });
+                
+                grid.appendChild(col);
+            });
+        }
+    });
+</script>
