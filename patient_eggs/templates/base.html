@@ -16,11 +16,7 @@
         <div class="container">
             <a class="navbar-brand" href="{{ url_for('main.home') }}">
                 <img src="{{ site_settings.get('logo') if site_settings.get('logo', '').startswith('http') else url_for('static', filename='img/' + site_settings.get('logo', 'default.jpg')) }}" alt="Logo" height="30" class="me-2">
-                {% if site_settings.get('site_logo') %}
-                    <img src="{{ site_settings['site_logo'] if site_settings['site_logo'].startswith('http') else url_for('static', filename='img/' + site_settings['site_logo']) }}" alt="Prairie Homestead" height="40">
-                {% else %}
-                    Prairie Homestead
-                {% endif %}
+                Prairie Homestead
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
