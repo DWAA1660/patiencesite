@@ -48,7 +48,11 @@ if __name__ == '__main__':
             'adult_hero_height': ('300px', 'Height of the Adult Birds page banner'),
             'eggs_hero_height': ('300px', 'Height of the Hatching Eggs page banner'),
             'about_hero_height': ('300px', 'Height of the About Us page banner'),
-            'contact_hero_height': ('300px', 'Height of the Contact Us page banner')
+            'contact_hero_height': ('300px', 'Height of the Contact Us page banner'),
+            
+            # About Page Images
+            'about_our_story_image': ('https://via.placeholder.com/600x400?text=Our+Story', 'Image for Our Story section on About page'),
+            'about_our_flocks_image': ('https://via.placeholder.com/600x400?text=Our+Flocks', 'Image for Our Flocks section on About page')
         }
 
         for key, (val, desc) in defaults.items():

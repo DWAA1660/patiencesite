@@ -21,7 +21,7 @@
     <!-- Section 1 -->
     <div class="row align-items-center mb-5">
         <div class="col-md-6">
-            <img src="https://via.placeholder.com/600x400?text=Our+Story" class="img-fluid rounded shadow" alt="Farm Life">
+            <img src="{{ site_settings.get('about_our_story_image') if site_settings.get('about_our_story_image', '').startswith('http') else url_for('static', filename='img/' + site_settings.get('about_our_story_image', 'default_story.jpg')) }}" class="img-fluid rounded shadow" alt="Farm Life">
         </div>
         <div class="col-md-6">
             <h3 class="mb-3 text-primary">Our Story</h3>
@@ -33,7 +33,7 @@
     <!-- Section 2 -->
     <div class="row align-items-center mb-5">
         <div class="col-md-6 order-md-2">
-            <img src="https://via.placeholder.com/600x400?text=Our+Flocks" class="img-fluid rounded shadow" alt="Our Flocks">
+            <img src="{{ site_settings.get('about_our_flocks_image') if site_settings.get('about_our_flocks_image', '').startswith('http') else url_for('static', filename='img/' + site_settings.get('about_our_flocks_image', 'default_flocks.jpg')) }}" class="img-fluid rounded shadow" alt="Our Flocks">
         </div>
         <div class="col-md-6 order-md-1">
             <h3 class="mb-3 text-success">Our Flocks</h3>
