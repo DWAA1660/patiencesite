@@ -312,11 +312,12 @@ a:hover {
     .mobile-egg-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 10px 20px;
+        gap: 0px 5px; /* Tighter gap for nest feel */
         justify-items: center;
         width: 100%;
-        max-width: 320px;
+        max-width: 300px; /* Slightly narrower to force closeness */
         margin: 0 auto;
+        padding-top: 10px;
     }
     
     .egg-pos {
@@ -329,10 +330,32 @@ a:hover {
         margin: 0 !important;
         
         /* Resize for mobile */
-        width: 100px;
-        height: 125px;
+        width: 105px;
+        height: 130px;
         font-size: 0.85rem;
         padding: 12px 8px;
+    }
+
+    /* Mobile "Nest" Rotations */
+    /* Top Left */
+    .mobile-egg-grid .egg-pos-1 {
+        transform: rotate(-10deg) !important;
+        margin-top: 10px !important; /* Push down slightly to nestle */
+    }
+    /* Top Right */
+    .mobile-egg-grid .egg-pos-2 {
+        transform: rotate(10deg) !important;
+        margin-top: 10px !important;
+    }
+    /* Bottom Left */
+    .mobile-egg-grid .egg-pos-3 {
+        transform: rotate(-10deg) !important;
+        margin-top: -15px !important; /* Tuck under top row */
+    }
+    /* Bottom Right */
+    .mobile-egg-grid .egg-pos-4 {
+        transform: rotate(10deg) !important;
+        margin-top: -15px !important;
     }
 
     .welcome-to-prairie {
