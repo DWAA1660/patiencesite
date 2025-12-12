@@ -186,6 +186,20 @@ def toggle_featured(product_id):
     db.session.commit()
     return {'success': True, 'is_featured': product.is_featured}
 
+@admin.route('/products/reorder', methods=['POST'])
+def reorder_products():
+    order_data = request.json.get('order', [])
+    if not order_data:
+        return {'error': 'No order data'}, 400
+        
+    for index, product_id in enumerate(order_data):
+        product = Product.query.get(product_id)
+        if product:
+            product.display_order = index
+            
+    db.session.commit()
+    return {'success': True}
+
 # --- Product Gallery Management ---
 @admin.route('/product/<int:product_id>/gallery/add', methods=['POST'])
 def add_product_image(product_id):
@@ -258,6 +272,20 @@ def delete_gallery_image(image_id):
     db.session.commit()
     flash('Image removed.')
     return redirect(url_for('admin.manage_gallery'))
+
+@admin.route('/gallery/reorder', methods=['POST'])
+def reorder_gallery_images():
+    order_data = request.json.get('order', [])
+    if not order_data:
+        return {'error': 'No order data'}, 400
+        
+    for index, image_id in enumerate(order_data):
+        img = GalleryImage.query.get(image_id)
+        if img:
+            img.display_order = index
+            
+    db.session.commit()
+    return {'success': True}
 
 @admin.route('/api/images')
 def list_images():

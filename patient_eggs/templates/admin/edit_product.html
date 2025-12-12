@@ -144,7 +144,8 @@
                 ghostClass: 'bg-light',
                 onEnd: function (evt) {
                     var order = [];
-                    document.querySelectorAll('.gallery-item').forEach(function(item) {
+                    // Scope selection to the grid
+                    el.querySelectorAll('.gallery-item').forEach(function(item) {
                         order.push(item.getAttribute('data-id'));
                     });
                     
@@ -155,6 +156,16 @@
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({order: order}),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            alert('Error reordering gallery images.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Network error while reordering.');
                     });
                     {% endif %}
                 }

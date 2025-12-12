@@ -11,7 +11,7 @@
         <thead>
             <tr>
                 <th>Featured</th>
-                <th>Order</th>
+                <th style="width: 50px;">Order</th>
                 <th>Image</th>
                 <th>Name</th>
                 <th>Type</th>
@@ -19,20 +19,22 @@
                 <th>Actions</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="product-list">
             {% for product in products %}
-            <tr>
-                <td class="text-center">
+            <tr data-id="{{ product.id }}" class="sortable-item">
+                <td class="text-center align-middle">
                     <button class="btn btn-link p-0 text-warning featured-toggle" data-id="{{ product.id }}" title="Toggle Featured">
                         <i class="bi bi-star{% if product.is_featured %}-fill{% endif %} fs-4"></i>
                     </button>
                 </td>
-                <td>{{ product.display_order }}</td>
-                <td>
+                <td class="text-center align-middle handle cursor-move">
+                    <i class="bi bi-grip-vertical text-muted fs-4"></i>
+                </td>
+                <td class="align-middle">
                     <img src="{{ url_for('static', filename='img/' + product.image_file) }}" alt="{{ product.name }}" style="width: 50px; height: 50px; object-fit: cover;">
                 </td>
-                <td>{{ product.name }}</td>
-                <td>
+                <td class="align-middle">{{ product.name }}</td>
+                <td class="align-middle">
                     {% if product.product_type == 'adult' %}
                         <span class="badge bg-info text-dark">Adult Bird</span>
                     {% elif product.product_type == 'egg' %}
@@ -41,8 +43,8 @@
                         <span class="badge bg-secondary">{{ product.product_type }}</span>
                     {% endif %}
                 </td>
-                <td>${{ product.price }}</td>
-                <td>
+                <td class="align-middle">${{ product.price }}</td>
+                <td class="align-middle">
                     <a href="{{ url_for('admin.edit_product', product_id=product.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
                     <form action="{{ url_for('admin.delete_product', product_id=product.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure? This will delete all inventory and order history related to this product.');">
                         <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
@@ -54,8 +56,42 @@
     </table>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Sortable Product List
+        var el = document.getElementById('product-list');
+        if (el) {
+            var sortable = Sortable.create(el, {
+                handle: '.handle', // Handle's class
+                animation: 150,
+                ghostClass: 'bg-light',
+                onEnd: function (evt) {
+                    var order = [];
+                    document.querySelectorAll('#product-list tr').forEach(function(item) {
+                        order.push(item.getAttribute('data-id'));
+                    });
+                    
+                    fetch("{{ url_for('admin.reorder_products') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({order: order}),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            alert('Error reordering products.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                }
+            });
+        }
+
         document.querySelectorAll('.featured-toggle').forEach(btn => {
             btn.addEventListener('click', function() {
                 const productId = this.getAttribute('data-id');
