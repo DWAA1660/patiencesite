@@ -38,10 +38,18 @@ class Product(db.Model):
     product_type = db.Column(db.String(20), nullable=False) # 'adult', 'egg', 'merch'
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     display_order = db.Column(db.Integer, default=0)
+    is_featured = db.Column(db.Boolean, default=False)
     
     # Relationships
+    images = db.relationship('ProductImage', backref='product', lazy=True, order_by='ProductImage.display_order', cascade="all, delete-orphan")
     inventory_adult = db.relationship('InventoryAdult', backref='product', uselist=False, lazy=True)
     inventory_eggs = db.relationship('InventoryEggWeekly', backref='product', lazy=True)
+
+class ProductImage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    image_file = db.Column(db.String(100), nullable=False)
+    display_order = db.Column(db.Integer, default=0)
 
 class InventoryAdult(db.Model):
     id = db.Column(db.Integer, primary_key=True)

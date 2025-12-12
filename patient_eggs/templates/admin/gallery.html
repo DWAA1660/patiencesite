@@ -31,10 +31,9 @@
                             <label for="caption" class="form-label">Caption (Optional)</label>
                             <input type="text" class="form-control" id="caption" name="caption">
                         </div>
-                        <div class="mb-3">
-                            <label for="display_order" class="form-label">Order</label>
-                            <input type="number" class="form-control" id="display_order" name="display_order" value="0">
-                        </div>
+                        <!-- Order is handled via drag and drop now -->
+                        <input type="hidden" name="display_order" value="999">
+                        
                         <button type="submit" class="btn btn-success w-100">Add to Gallery</button>
                     </form>
                 </div>
@@ -43,14 +42,14 @@
 
         <!-- Current Gallery -->
         <div class="col-md-8">
-            <div class="row">
+            <div class="row" id="gallery-grid">
                 {% for image in images %}
-                <div class="col-md-4 mb-3">
-                    <div class="card h-100">
+                <div class="col-md-4 mb-3 gallery-item" data-id="{{ image.id }}">
+                    <div class="card h-100 shadow-sm cursor-move">
                         <img src="{{ url_for('static', filename='img/' + image.image_file) }}" class="card-img-top" style="height: 150px; object-fit: cover;">
                         <div class="card-body">
-                            <p class="card-text small text-muted mb-1">File: {{ image.image_file }}</p>
-                            <p class="card-text fw-bold">{{ image.caption or 'No Caption' }}</p>
+                            <p class="card-text small text-muted mb-1 text-truncate" title="{{ image.image_file }}">File: {{ image.image_file }}</p>
+                            <p class="card-text fw-bold text-truncate">{{ image.caption or 'No Caption' }}</p>
                             <form action="{{ url_for('admin.delete_gallery_image', image_id=image.id) }}" method="POST" onsubmit="return confirm('Remove this image?');">
                                 <button type="submit" class="btn btn-sm btn-outline-danger w-100">Remove</button>
                             </form>
@@ -63,6 +62,7 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 {% include 'admin/_image_selector.html' %}
 <script>
     function selectGalleryImage() {
@@ -72,5 +72,29 @@
             document.getElementById('preview-container').style.display = 'block';
         });
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var el = document.getElementById('gallery-grid');
+        if (el) {
+            var sortable = Sortable.create(el, {
+                animation: 150,
+                ghostClass: 'bg-light',
+                onEnd: function (evt) {
+                    var order = [];
+                    document.querySelectorAll('.gallery-item').forEach(function(item) {
+                        order.push(item.getAttribute('data-id'));
+                    });
+                    
+                    fetch("{{ url_for('admin.reorder_gallery_images') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({order: order}),
+                    });
+                }
+            });
+        }
+    });
 </script>
 {% endblock %}

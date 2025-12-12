@@ -63,15 +63,61 @@
                     </form>
                 </div>
             </div>
+
+            {% if product %}
+            <div class="card shadow mt-4">
+                <div class="card-header bg-secondary text-white">
+                    <h4 class="mb-0">Product Gallery</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3" id="gallery-grid">
+                        {% for image in product.images %}
+                        <div class="col-md-3 col-6 mb-3 gallery-item" data-id="{{ image.id }}">
+                            <div class="card h-100 cursor-move">
+                                <img src="{{ url_for('static', filename='img/' + image.image_file) }}" class="card-img-top" style="height: 150px; object-fit: cover;">
+                                <div class="card-body p-2 text-center">
+                                    <form action="{{ url_for('admin.delete_product_image', image_id=image.id) }}" method="POST">
+                                        <button type="submit" class="btn btn-sm btn-danger w-100">Remove</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <hr>
+                    
+                    <form action="{{ url_for('admin.add_product_image', product_id=product.id) }}" method="POST" class="row align-items-end">
+                        <div class="col-md-8">
+                            <label for="gallery_image" class="form-label">Add Image to Gallery</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="gallery_image" name="image_file" placeholder="Select image..." required>
+                                <button class="btn btn-outline-secondary" type="button" onclick="selectGalleryImage()">Select</button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-success w-100">Add Image</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 {% include 'admin/_image_selector.html' %}
 <script>
     function selectProductImage() {
         window.openImageSelector(function(filename, url) {
             document.getElementById('image_file').value = filename;
+        });
+    }
+    
+    function selectGalleryImage() {
+        window.openImageSelector(function(filename, url) {
+            document.getElementById('gallery_image').value = filename;
         });
     }
 
@@ -89,6 +135,31 @@
                     });
                 }
             });
+
+        // Sortable Gallery
+        var el = document.getElementById('gallery-grid');
+        if (el) {
+            var sortable = Sortable.create(el, {
+                animation: 150,
+                ghostClass: 'bg-light',
+                onEnd: function (evt) {
+                    var order = [];
+                    document.querySelectorAll('.gallery-item').forEach(function(item) {
+                        order.push(item.getAttribute('data-id'));
+                    });
+                    
+                    {% if product %}
+                    fetch("{{ url_for('admin.reorder_product_images', product_id=product.id) }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({order: order}),
+                    });
+                    {% endif %}
+                }
+            });
+        }
     });
 </script>
 {% endblock %}

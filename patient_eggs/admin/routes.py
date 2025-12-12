@@ -178,6 +178,51 @@ def delete_product(product_id):
     flash('Product deleted.')
     return redirect(url_for('admin.manage_products'))
 
+# --- Product Gallery Management ---
+@admin.route('/product/<int:product_id>/gallery/add', methods=['POST'])
+def add_product_image(product_id):
+    product = Product.query.get_or_404(product_id)
+    image_file = request.form.get('image_file')
+    
+    if image_file:
+        # Get max display order
+        max_order = db.session.query(db.func.max(ProductImage.display_order))\
+            .filter_by(product_id=product_id).scalar() or 0
+            
+        img = ProductImage(
+            product_id=product.id,
+            image_file=image_file,
+            display_order=max_order + 1
+        )
+        db.session.add(img)
+        db.session.commit()
+        flash('Image added to product gallery.')
+    
+    return redirect(url_for('admin.edit_product', product_id=product_id))
+
+@admin.route('/product/gallery/delete/<int:image_id>', methods=['POST'])
+def delete_product_image(image_id):
+    img = ProductImage.query.get_or_404(image_id)
+    product_id = img.product_id
+    db.session.delete(img)
+    db.session.commit()
+    flash('Image removed from gallery.')
+    return redirect(url_for('admin.edit_product', product_id=product_id))
+
+@admin.route('/product/<int:product_id>/gallery/reorder', methods=['POST'])
+def reorder_product_images(product_id):
+    order_data = request.json.get('order', [])
+    if not order_data:
+        return {'error': 'No order data'}, 400
+        
+    for index, image_id in enumerate(order_data):
+        img = ProductImage.query.get(image_id)
+        if img and img.product_id == product_id:
+            img.display_order = index
+            
+    db.session.commit()
+    return {'success': True}
+
 # --- Gallery Management ---
 @admin.route('/gallery')
 def manage_gallery():

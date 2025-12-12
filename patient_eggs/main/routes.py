@@ -7,8 +7,8 @@ main = Blueprint('main', __name__)
 @main.route('/')
 @main.route('/home')
 def home():
-    # Logic for featured inventory (3x3 grid) can go here
-    featured_products = Product.query.order_by(Product.display_order).limit(9).all()
+    # Logic for featured inventory (3x3 grid)
+    featured_products = Product.query.filter_by(is_featured=True).order_by(Product.display_order).all()
     gallery_images = GalleryImage.query.order_by(GalleryImage.display_order).all()
     return render_template('home.html', products=featured_products, gallery_images=gallery_images)
 
