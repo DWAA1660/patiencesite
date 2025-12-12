@@ -235,7 +235,7 @@ a:hover {
 
 /* Large Paragraph Banner */
 .para-banner {
-    background-color: var(--wheatgrass-yellow);
+    background-color: #FFF9C4; /* Soft Yellow */
     padding: 4rem 2rem;
     text-align: center;
     border-top: 5px solid var(--sunset-pink);
