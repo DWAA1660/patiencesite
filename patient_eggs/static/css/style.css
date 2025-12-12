@@ -1,4 +1,53 @@
 /* Custom Styles */
+:root {
+    --wheatgrass-yellow: #F5E8C8;
+    --wheatgrass-dark: #E0D1A4;
+    --sunset-pink: #FF9E80;
+    --sunset-pink-dark: #E88C6E;
+    --text-brown: #4A3B32;
+}
+
+body {
+    background-color: var(--wheatgrass-yellow);
+    color: var(--text-brown);
+}
+
+.bg-wheatgrass {
+    background-color: var(--wheatgrass-yellow) !important;
+}
+
+.bg-sunset {
+    background-color: var(--sunset-pink) !important;
+}
+
+.text-wheatgrass {
+    color: var(--wheatgrass-yellow) !important;
+}
+
+.text-sunset {
+    color: var(--sunset-pink) !important;
+}
+
+.navbar {
+    background-color: var(--wheatgrass-yellow) !important;
+    border-bottom: 3px solid var(--sunset-pink);
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: var(--text-brown);
+    font-weight: 500;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    color: var(--sunset-pink-dark);
+}
+
+footer {
+    background-color: var(--text-brown) !important;
+    color: var(--wheatgrass-yellow) !important;
+    border-top: 5px solid var(--sunset-pink);
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
 
@@ -13,6 +62,53 @@
     font-family: 'Special Elite', Georgia, 'Times New Roman', serif;
     letter-spacing: 0.5px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.35);
+}
+
+
+/* Bootstrap Overrides & Theme Integration */
+.btn-primary {
+    background-color: var(--sunset-pink) !important;
+    border-color: var(--sunset-pink) !important;
+    color: var(--text-brown) !important;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background-color: var(--sunset-pink-dark) !important;
+    border-color: var(--sunset-pink-dark) !important;
+    color: var(--text-brown) !important;
+}
+
+.btn-outline-primary {
+    color: var(--text-brown) !important;
+    border-color: var(--sunset-pink) !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--sunset-pink) !important;
+    border-color: var(--sunset-pink) !important;
+    color: var(--text-brown) !important;
+}
+
+.text-primary {
+    color: var(--sunset-pink-dark) !important;
+}
+
+a {
+    color: var(--text-brown);
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: var(--sunset-pink-dark);
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--wheatgrass-dark);
+}
+
+.text-muted {
+    color: #6d5e53 !important; /* Lighter brown for muted text */
 }
 
 /* Egg Shaped Buttons */
@@ -38,7 +134,7 @@
     white-space: normal; /* Allow text to wrap */
     line-height: 1.2;
     font-size: 1.1rem;
-    color: #2b1e16 !important;
+    color: var(--text-brown) !important;
     text-shadow: 0 1px 0 rgba(255,255,255,0.55);
 }
 
@@ -106,7 +202,8 @@
 
 /* Icon Cards */
 .icon-card {
-    background: #fff;
+    background: var(--wheatgrass-yellow);
+    border: 2px solid var(--sunset-pink);
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -138,11 +235,11 @@
 
 /* Large Paragraph Banner */
 .para-banner {
-    background-color: #fdf5e6; /* Old Lace */
+    background-color: var(--wheatgrass-yellow);
     padding: 4rem 2rem;
     text-align: center;
-    border-top: 5px solid #d35400;
-    border-bottom: 5px solid #d35400;
+    border-top: 5px solid var(--sunset-pink);
+    border-bottom: 5px solid var(--sunset-pink);
 }
 
 /* Egg Navigation Layout */
