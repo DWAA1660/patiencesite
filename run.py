@@ -1,11 +1,27 @@
 from patient_eggs import create_app, db
 from patient_eggs.models import User, Product, InventoryAdult, InventoryEggWeekly, GalleryImage, BlogPost, SiteSetting
+from sqlalchemy import text
 
 app = create_app()
 
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+        
+        # Check and add is_featured column if missing (Migration aid)
+        try:
+            with db.engine.connect() as conn:
+                # SQLite specific check
+                result = conn.execute(text("PRAGMA table_info(product)"))
+                columns = [row[1] for row in result]
+                if 'is_featured' not in columns:
+                    print("Adding is_featured column to product table...")
+                    conn.execute(text("ALTER TABLE product ADD COLUMN is_featured BOOLEAN DEFAULT 0"))
+                    conn.commit()
+                    print("Column added.")
+        except Exception as e:
+            print(f"Schema check warning: {e}")
+
         # Create admin if not exists
         if not User.query.filter_by(username='admin').first():
             admin = User(username='admin', email='admin@example.com', is_admin=True)
