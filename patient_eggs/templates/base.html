@@ -15,6 +15,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="{{ url_for('main.home') }}">
+                <img src="{{ site_settings.get('logo') if site_settings.get('logo', '').startswith('http') else url_for('static', filename='img/' + site_settings.get('logo', 'default.jpg')) }}" alt="Logo" height="30" class="me-2">
                 {% if site_settings.get('site_logo') %}
                     <img src="{{ site_settings['site_logo'] if site_settings['site_logo'].startswith('http') else url_for('static', filename='img/' + site_settings['site_logo']) }}" alt="Prairie Homestead" height="40">
                 {% else %}

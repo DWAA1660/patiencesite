@@ -185,7 +185,7 @@
 .welcome-to-prairie {
     position: absolute;
     left: 50%;
-    top: calc(50% - 220px);
+    top: calc(50% - 300px);
     bottom: auto;
     transform: translateX(-50%);
     z-index: 25;
