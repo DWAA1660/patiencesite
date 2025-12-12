@@ -4,8 +4,6 @@
 <!-- Hero Section -->
 <div class="hero p-5 text-center bg-image" style="background-image: url('{{ site_settings['home_hero_bg'] if site_settings.get('home_hero_bg', '').startswith('http') else url_for('static', filename='img/' + site_settings.get('home_hero_bg', 'default_hero.jpg')) }}'); height: {{ site_settings.get('home_hero_height', '500px') }}; background-size: cover;">
     <div class="text-white w-100">
-        <h4 class="mb-4">Quality Poultry & Hatching Eggs</h4>
-        
         <!-- Egg Navigation Layout -->
         <div class="egg-nav-container">
             <!-- Central Logo (Editable via 'logo' key in settings) -->

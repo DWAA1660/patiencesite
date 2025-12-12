@@ -171,14 +171,15 @@
     position: absolute;
     z-index: 30;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    margin: 0;
 }
 
 .welcome-to-prairie {
     position: absolute;
     left: 50%;
-    bottom: -10px;
+    bottom: -55px;
     transform: translateX(-50%);
-    z-index: 25;
+    z-index: 15;
     font-size: clamp(2.2rem, 4vw, 3.5rem);
     line-height: 1;
     pointer-events: none;
@@ -224,26 +225,26 @@
 
 @media (min-width: 992px) {
     .egg-pos-1 {
-        top: calc(50% + 90px);
-        left: calc(50% - 260px);
-        transform: rotate(-18deg);
+        top: calc(50% + 60px);
+        left: calc(50% - 310px);
+        transform: rotate(-28deg);
     }
     
     .egg-pos-2 {
-        top: calc(50% + 105px);
-        left: calc(50% - 150px);
-        transform: rotate(-6deg);
+        top: calc(50% + 75px);
+        left: calc(50% - 170px);
+        transform: rotate(-12deg);
     }
     
     .egg-pos-3 {
-        top: calc(50% + 105px);
+        top: calc(50% + 75px);
         left: calc(50% + 30px);
-        transform: rotate(6deg);
+        transform: rotate(12deg);
     }
     
     .egg-pos-4 {
-        top: calc(50% + 90px);
-        left: calc(50% + 140px);
-        transform: rotate(18deg);
+        top: calc(50% + 60px);
+        left: calc(50% + 170px);
+        transform: rotate(28deg);
     }
 }
