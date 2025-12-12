@@ -178,6 +178,14 @@ def delete_product(product_id):
     flash('Product deleted.')
     return redirect(url_for('admin.manage_products'))
 
+@admin.route('/products/toggle_featured/<int:product_id>', methods=['POST'])
+def toggle_featured(product_id):
+    # Toggle the boolean value
+    product = Product.query.get_or_404(product_id)
+    product.is_featured = not product.is_featured
+    db.session.commit()
+    return {'success': True, 'is_featured': product.is_featured}
+
 # --- Product Gallery Management ---
 @admin.route('/product/<int:product_id>/gallery/add', methods=['POST'])
 def add_product_image(product_id):

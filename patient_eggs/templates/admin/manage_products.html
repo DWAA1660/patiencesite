@@ -61,13 +61,23 @@
                 const productId = this.getAttribute('data-id');
                 const icon = this.querySelector('i');
                 
-                fetch(`/admin/products/toggle_featured/${productId}`, {
+                // Construct URL dynamically using a dummy ID, then replacing it
+                // This ensures we respect the app's URL structure
+                const baseUrl = "{{ url_for('admin.toggle_featured', product_id=0) }}";
+                const url = baseUrl.replace('0', productId);
+                
+                fetch(url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     if (data.success) {
                         if (data.is_featured) {
@@ -78,6 +88,10 @@
                             icon.classList.add('bi-star');
                         }
                     }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error updating status. Please try refreshing the page.');
                 });
             });
         });
