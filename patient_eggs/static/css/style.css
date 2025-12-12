@@ -17,8 +17,13 @@
 
 /* Egg Shaped Buttons */
 .btn-egg {
-    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-    padding: 10px;
+    background-image: url('../img/egg.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent !important;
+    border: none !important;
+    padding: 18px 16px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -33,10 +38,12 @@
     white-space: normal; /* Allow text to wrap */
     line-height: 1.2;
     font-size: 1.1rem;
+    color: #2b1e16 !important;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.55);
 }
 
 .btn-egg:hover {
-    transform: translateY(-5px);
+    transform: rotate(var(--egg-rot, 0deg)) translateY(-5px);
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
@@ -70,32 +77,32 @@
 
 /* Fall Themed Buttons */
 .btn-fall-1 {
-    background-color: #d35400; /* Pumpkin */
+    background-color: transparent;
     color: white;
     border: none;
 }
-.btn-fall-1:hover { background-color: #ba4a00; color: white; }
+.btn-fall-1:hover { background-color: transparent; color: white; }
 
 .btn-fall-2 {
-    background-color: #8e44ad; /* Deep Purple */
+    background-color: transparent;
     color: white;
     border: none;
 }
-.btn-fall-2:hover { background-color: #71368a; color: white; }
+.btn-fall-2:hover { background-color: transparent; color: white; }
 
 .btn-fall-3 {
-    background-color: #27ae60; /* Green */
+    background-color: transparent;
     color: white;
     border: none;
 }
-.btn-fall-3:hover { background-color: #2ecc71; color: white; }
+.btn-fall-3:hover { background-color: transparent; color: white; }
 
 .btn-fall-4 {
-    background-color: #f39c12; /* Orange/Gold */
+    background-color: transparent;
     color: white;
     border: none;
 }
-.btn-fall-4:hover { background-color: #d68910; color: white; }
+.btn-fall-4:hover { background-color: transparent; color: white; }
 
 /* Icon Cards */
 .icon-card {
@@ -172,15 +179,17 @@
     z-index: 30;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     margin: 0;
+    transform: rotate(var(--egg-rot, 0deg));
 }
 
 .welcome-to-prairie {
     position: absolute;
     left: 50%;
-    bottom: -55px;
+    top: calc(50% - 220px);
+    bottom: auto;
     transform: translateX(-50%);
-    z-index: 15;
-    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    z-index: 25;
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
     line-height: 1;
     pointer-events: none;
     font-family: 'Special Elite', Georgia, 'Times New Roman', serif;
@@ -220,6 +229,7 @@
         transform: none;
         z-index: 15;
         margin-top: 10px;
+        order: -2;
     }
 }
 
@@ -227,24 +237,24 @@
     .egg-pos-1 {
         top: calc(50% + 60px);
         left: calc(50% - 310px);
-        transform: rotate(-28deg);
+        --egg-rot: -28deg;
     }
     
     .egg-pos-2 {
         top: calc(50% + 75px);
         left: calc(50% - 170px);
-        transform: rotate(-12deg);
+        --egg-rot: -12deg;
     }
     
     .egg-pos-3 {
         top: calc(50% + 75px);
         left: calc(50% + 30px);
-        transform: rotate(12deg);
+        --egg-rot: 12deg;
     }
     
     .egg-pos-4 {
         top: calc(50% + 60px);
         left: calc(50% + 170px);
-        transform: rotate(28deg);
+        --egg-rot: 28deg;
     }
 }
