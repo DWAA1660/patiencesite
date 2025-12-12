@@ -10,10 +10,12 @@
             <div class="central-logo" style="background-image: url('{{ site_settings.get('logo') if site_settings.get('logo', '').startswith('http') else url_for('static', filename='img/' + site_settings.get('logo', 'default.jpg')) }}');"></div>
             
             <!-- Eggs positioned around logo -->
-            <a href="{{ url_for('shop.adult_birds') }}" class="btn btn-fall-1 btn-egg egg-pos egg-pos-1">Shop Birds</a>
-            <a href="{{ url_for('main.about') }}" class="btn btn-fall-3 btn-egg egg-pos egg-pos-2">Our Story</a>
-            <a href="{{ url_for('shop.hatching_eggs') }}" class="btn btn-fall-2 btn-egg egg-pos egg-pos-3">Hatching Eggs</a>
-            <a href="{{ url_for('shop.chicks') }}" class="btn btn-fall-4 btn-egg egg-pos egg-pos-4">Chicks</a>
+            <div class="mobile-egg-grid">
+                <a href="{{ url_for('shop.adult_birds') }}" class="btn btn-fall-1 btn-egg egg-pos egg-pos-1">Shop Birds</a>
+                <a href="{{ url_for('main.about') }}" class="btn btn-fall-3 btn-egg egg-pos egg-pos-2">Our Story</a>
+                <a href="{{ url_for('shop.hatching_eggs') }}" class="btn btn-fall-2 btn-egg egg-pos egg-pos-3">Hatching Eggs</a>
+                <a href="{{ url_for('shop.chicks') }}" class="btn btn-fall-4 btn-egg egg-pos egg-pos-4">Chicks</a>
+            </div>
 
             <h1 class="mb-0 fw-bold rustic-font welcome-to-prairie">Welcome to <br> Prairie&nbsp;Homestead</h1>
         </div>
