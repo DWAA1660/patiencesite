@@ -46,6 +46,11 @@
                     <input type="number" class="form-control" id="quantity" name="quantity" value="1" min="1">
                 </div>
 
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="local_pickup" name="local_pickup">
+                    <label class="form-check-label" for="local_pickup" style="font-weight: bold; color: red;">Local Pick Up Order</label>
+                </div>
+
                 {% if product.product_type == 'adult' %}
                 <div class="mb-3">
                     <label for="gender" class="form-label">Gender</label>

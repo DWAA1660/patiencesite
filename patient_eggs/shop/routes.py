@@ -48,6 +48,8 @@ def add_to_cart():
         options['substitute_date'] = True
     if 'substitute_breed' in request.form:
         options['substitute_breed'] = True
+    if 'local_pickup' in request.form:
+        options['local_pickup'] = True
 
     cart = session.get('cart', {})
     # Simple cart logic: Key by product_id (this prevents multiple configs of same product, ideally key by composite or list)
