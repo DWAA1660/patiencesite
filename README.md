@@ -5,7 +5,7 @@
 - SQLite
 - Stripe API (Integration Ready)
 - Bootstrap 5
-
+ 
 ## Setup
 
 1. Create a virtual environment:
