@@ -172,6 +172,7 @@ def checkout():
         shipping_info = {
             'name': request.form.get('name'),
             'email': request.form.get('email'),
+            'phone': request.form.get('phone'),
             'address': request.form.get('address'),
             'city': request.form.get('city'),
             'state': request.form.get('state'),
