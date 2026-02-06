@@ -39,6 +39,7 @@
                     {% if shipping_info %}
                         <p><strong>Name:</strong> {{ shipping_info.get('name') }}</p>
                         <p><strong>Email:</strong> {{ shipping_info.get('email') }}</p>
+                        <p><strong>Phone:</strong> {{ shipping_info.get('phone') }}</p>
                         <p><strong>Address:</strong><br>
                         {{ shipping_info.get('address') }}<br>
                         {{ shipping_info.get('city') }}, {{ shipping_info.get('state') }} {{ shipping_info.get('zip') }}
