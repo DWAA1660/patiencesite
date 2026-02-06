@@ -50,6 +50,9 @@
     </div>
 
     <h3>Recent Orders</h3>
+    <div class="mb-3">
+        <a href="{{ url_for('admin.fulfilled_orders') }}" class="btn btn-outline-secondary">View Fulfilled Orders</a>
+    </div>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -73,7 +76,9 @@
                 <td>{{ order.payment_status }}</td>
                 <td>
                     <a href="{{ url_for('admin.view_order', order_id=order.id) }}" class="btn btn-sm btn-info">View</a>
-                    <button class="btn btn-sm btn-success">Mark Shipped</button>
+                    <form action="{{ url_for('admin.mark_shipped', order_id=order.id) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Mark this order as shipped?')">Mark Shipped</button>
+                    </form>
                 </td>
             </tr>
             {% endfor %}

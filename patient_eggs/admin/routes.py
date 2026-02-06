@@ -16,8 +16,22 @@ def require_admin():
 
 @admin.route('/dashboard')
 def dashboard():
-    orders = Order.query.all()
+    # Show only pending/active orders
+    orders = Order.query.filter(Order.status != 'Shipped').all()
     return render_template('admin/dashboard.html', orders=orders)
+
+@admin.route('/order/mark_shipped/<int:order_id>', methods=['POST'])
+def mark_shipped(order_id):
+    order = Order.query.get_or_404(order_id)
+    order.status = 'Shipped'
+    db.session.commit()
+    flash(f'Order #{order.id} marked as Shipped.')
+    return redirect(url_for('admin.dashboard'))
+
+@admin.route('/orders/fulfilled')
+def fulfilled_orders():
+    orders = Order.query.filter_by(status='Shipped').all()
+    return render_template('admin/fulfilled_orders.html', orders=orders)
 
 @admin.route('/order/<int:order_id>')
 def view_order(order_id):
