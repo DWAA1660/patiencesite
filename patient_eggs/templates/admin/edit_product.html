@@ -25,12 +25,19 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="product_type" class="form-label">Product Type</label>
-                                <select class="form-select" id="product_type" name="product_type" required>
+                                <select class="form-select" id="product_type" name="product_type" required onchange="toggleInventoryField()">
                                     <option value="adult" {% if product and product.product_type == 'adult' %}selected{% endif %}>Adult Bird (Instant)</option>
+                                    <option value="chick" {% if product and product.product_type == 'chick' %}selected{% endif %}>Chicks (Instant)</option>
                                     <option value="egg" {% if product and product.product_type == 'egg' %}selected{% endif %}>Hatching Eggs (Weeks)</option>
                                     <option value="merch" {% if product and product.product_type == 'merch' %}selected{% endif %}>Merchandise</option>
                                 </select>
                             </div>
+                        </div>
+
+                        <div class="mb-3" id="inventory_field">
+                            <label for="quantity" class="form-label">Quantity Available</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" value="{{ product.inventory_adult.quantity if product and product.inventory_adult else 0 }}">
+                            <small class="text-muted">For items with simple inventory (not weekly eggs).</small>
                         </div>
 
                         <div class="row">
@@ -109,6 +116,19 @@
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 {% include 'admin/_image_selector.html' %}
 <script>
+    function toggleInventoryField() {
+        var type = document.getElementById('product_type').value;
+        var field = document.getElementById('inventory_field');
+        if (type === 'egg') {
+            field.style.display = 'none';
+        } else {
+            field.style.display = 'block';
+        }
+    }
+    
+    // Run on load
+    document.addEventListener('DOMContentLoaded', toggleInventoryField);
+
     function selectProductImage() {
         window.openImageSelector(function(filename, url) {
             document.getElementById('image_file').value = filename;

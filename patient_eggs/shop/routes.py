@@ -4,6 +4,7 @@ from patient_eggs.models import Product, InventoryEggWeekly, Order, OrderItem
 from patient_eggs import db
 import json
 import stripe
+from datetime import datetime
 
 shop = Blueprint('shop', __name__)
 
@@ -219,14 +220,24 @@ def checkout():
                 
                 # Update Inventory (Simplified)
                 # Note: A more robust system would check stock availability again here
-                if item['product'].product_type == 'adult':
+                if item['product'].product_type in ['adult', 'chick', 'merch']:
                     inv = item['product'].inventory_adult
                     if inv:
                         inv.quantity -= item['quantity']
                 elif item['product'].product_type == 'egg' and 'week' in item['options']:
                     # Find the specific week inventory
-                    # Week option is stored as string "YYYY-MM-DD" or similar from form
-                    pass # TODO: Implement specific week inventory decrement
+                    week_str = item['options']['week']
+                    try:
+                        week_date = datetime.strptime(week_str, '%Y-%m-%d').date()
+                        egg_inv = InventoryEggWeekly.query.filter_by(
+                            product_id=item['product'].id, 
+                            week_start_date=week_date
+                        ).first()
+                        
+                        if egg_inv:
+                            egg_inv.quantity_sold += item['quantity']
+                    except ValueError:
+                        pass # Should handle error or log it
 
             db.session.commit()
             

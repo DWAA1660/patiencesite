@@ -136,7 +136,8 @@ def add_product():
             weeks = InventoryEggWeekly.generate_weeks(product.id, default_qty=0)
             db.session.add_all(weeks)
             db.session.commit()
-        elif product_type == 'adult':
+        else:
+            # For adult, chick, merch - use InventoryAdult for simple quantity
             inv = InventoryAdult(product_id=product.id, quantity=0)
             db.session.add(inv)
             db.session.commit()
@@ -156,6 +157,19 @@ def edit_product(product_id):
         product.product_type = request.form['product_type']
         product.image_file = request.form.get('image_file', product.image_file)
         product.display_order = int(request.form.get('display_order', 0))
+        
+        # Handle Inventory Update for non-egg types
+        if product.product_type != 'egg':
+            try:
+                qty = int(request.form.get('quantity', 0))
+                if product.inventory_adult:
+                    product.inventory_adult.quantity = qty
+                else:
+                    # Create if missing
+                    inv = InventoryAdult(product_id=product.id, quantity=qty)
+                    db.session.add(inv)
+            except ValueError:
+                pass # Ignore invalid quantity
         
         db.session.commit()
         flash('Product updated successfully!')
