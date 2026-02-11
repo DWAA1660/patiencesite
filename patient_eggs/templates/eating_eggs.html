@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Eating Eggs Hero -->
+<div class="hero p-5 text-center bg-image" style="background-image: url('{{ site_settings['eating_eggs_hero_bg'] if site_settings.get('eating_eggs_hero_bg', '').startswith('http') else url_for('static', filename='img/' + site_settings.get('eating_eggs_hero_bg', 'default_eggs.jpg')) }}'); height: {{ site_settings.get('eating_eggs_hero_height', '300px') }}; background-size: cover;">
+    <div class="text-white w-100">
+        <h1 class="display-4 fw-bold">Eating Eggs</h1>
+        <p class="lead">Fresh, delicious eggs from our pasture-raised flock.</p>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ url_for('static', filename='img/' + product.image_file) }}" class="card-img-top" alt="{{ product.name }}">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text text-muted">{{ product.description[:80] }}...</p>
+                    <div class="mt-auto">
+                        <p class="card-text fw-bold fs-5 text-success">${{ product.price }} <span class="fs-6 fw-normal text-muted">/ dozen</span></p>
+                        <a href="{{ url_for('shop.product_detail', product_id=product.id) }}" class="btn btn-outline-success w-100">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center">
+            <h3>No eating eggs currently available. Please check back later!</h3>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

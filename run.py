@@ -37,6 +37,7 @@ if __name__ == '__main__':
             'chicks_hero_bg': ('https://via.placeholder.com/1200x300?text=Chicks', 'Chicks page header background'),
             'adult_hero_bg': ('https://via.placeholder.com/1200x300?text=Adult+Birds', 'Adult birds page header background'),
             'eggs_hero_bg': ('https://via.placeholder.com/1200x300?text=Hatching+Eggs', 'Hatching eggs page header background'),
+            'eating_eggs_hero_bg': ('https://via.placeholder.com/1200x300?text=Eating+Eggs', 'Eating eggs page header background'),
             'about_hero_bg': ('https://via.placeholder.com/1200x300?text=About+Us', 'About Us page header background'),
             'contact_hero_bg': ('https://via.placeholder.com/1200x300?text=Contact+Us', 'Contact Us page header background'),
             'site_logo': ('', 'Website logo displayed in the navbar'),
@@ -47,6 +48,7 @@ if __name__ == '__main__':
             'chicks_hero_height': ('300px', 'Height of the Chicks page banner'),
             'adult_hero_height': ('300px', 'Height of the Adult Birds page banner'),
             'eggs_hero_height': ('300px', 'Height of the Hatching Eggs page banner'),
+            'eating_eggs_hero_height': ('300px', 'Height of the Eating Eggs page banner'),
             'about_hero_height': ('300px', 'Height of the About Us page banner'),
             'contact_hero_height': ('300px', 'Height of the Contact Us page banner'),
             
@@ -73,14 +75,16 @@ if __name__ == '__main__':
             p1 = Product(name='Black Copper Marans', description='Beautiful dark brown eggs.', price=50.00, product_type='adult', image_file='default.jpg')
             p2 = Product(name='Ameraucana', description='Blue eggs.', price=45.00, product_type='adult', image_file='default.jpg')
             p3 = Product(name='Olive Egger Hatching Eggs', description='Olive green eggs.', price=60.00, product_type='egg', image_file='default.jpg')
+            p4 = Product(name='Farm Fresh Eating Eggs', description='Delicious pasture-raised rainbow eggs.', price=6.00, product_type='eating_egg', image_file='default.jpg')
             
-            db.session.add_all([p1, p2, p3])
+            db.session.add_all([p1, p2, p3, p4])
             db.session.commit()
             
             # Seed Inventory
             inv1 = InventoryAdult(product_id=p1.id, quantity=10)
             inv2 = InventoryAdult(product_id=p2.id, quantity=5)
-            db.session.add_all([inv1, inv2])
+            inv4 = InventoryAdult(product_id=p4.id, quantity=50)
+            db.session.add_all([inv1, inv2, inv4])
             
             # Seed Weekly Inventory for Eggs
             weeks = InventoryEggWeekly.generate_weeks(p3.id, default_qty=12)

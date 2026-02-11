@@ -19,6 +19,11 @@ def hatching_eggs():
     # Assuming we might want to show available weeks here or on detail page
     return render_template('hatching_eggs.html', products=products)
 
+@shop.route('/eating-eggs')
+def eating_eggs():
+    products = Product.query.filter_by(product_type='eating_egg').all()
+    return render_template('eating_eggs.html', products=products)
+
 @shop.route('/chicks')
 def chicks():
     products = Product.query.filter_by(product_type='chick').all()
@@ -215,7 +220,7 @@ def checkout():
                     quantity=item['quantity'],
                     price_at_purchase=item['price'],
                     options=json.dumps(item['options'])
-                )
+                ), 'eating_egg'
                 db.session.add(order_item)
                 
                 # Update Inventory (Simplified)
