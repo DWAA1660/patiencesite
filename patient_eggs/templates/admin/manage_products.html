@@ -39,6 +39,8 @@
                         <span class="badge bg-info text-dark">Adult Bird</span>
                     {% elif product.product_type == 'egg' %}
                         <span class="badge bg-warning text-dark">Hatching Eggs</span>
+                    {% elif product.product_type == 'eating_egg' %}
+                        <span class="badge bg-success">Eating Eggs</span>
                     {% else %}
                         <span class="badge bg-secondary">{{ product.product_type }}</span>
                     {% endif %}

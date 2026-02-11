@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <h2>Eating Egg Inventory</h2>
+    <p class="text-muted">Manage available dozens for immediate sale/pickup.</p>
+    
+    <form action="{{ url_for('admin.update_eating_egg_inventory') }}" method="POST">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Current Price</th>
+                            <th style="width: 200px;">Quantity Available (Dozens)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td class="align-middle fw-bold">{{ product.name }}</td>
+                            <td class="align-middle">${{ product.price }}</td>
+                            <td>
+                                <input type="number" class="form-control" name="qty_{{ product.id }}" value="{{ product.inventory_adult.quantity if product.inventory_adult else 0 }}" min="0">
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="3" class="text-center text-muted">No eating egg products found. Add one in "Manage Products".</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer bg-white border-top-0 text-end">
+                <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary me-2">Cancel</a>
+                <button type="submit" class="btn btn-success">Save Inventory</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

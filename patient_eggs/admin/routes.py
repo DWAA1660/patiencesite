@@ -119,6 +119,28 @@ def update_egg_inventory():
     flash('Inventory updated')
     return redirect(url_for('admin.egg_inventory'))
 
+@admin.route('/inventory/eating-eggs')
+def eating_egg_inventory():
+    products = Product.query.filter_by(product_type='eating_egg').all()
+    return render_template('admin/eating_egg_inventory.html', products=products)
+
+@admin.route('/inventory/eating-eggs/update', methods=['POST'])
+def update_eating_egg_inventory():
+    for key, value in request.form.items():
+        if key.startswith('qty_'):
+            product_id = int(key.split('_')[1])
+            product = Product.query.get(product_id)
+            if product:
+                qty = int(value)
+                if product.inventory_adult:
+                    product.inventory_adult.quantity = qty
+                else:
+                    inv = InventoryAdult(product_id=product.id, quantity=qty)
+                    db.session.add(inv)
+    db.session.commit()
+    flash('Eating egg inventory updated.')
+    return redirect(url_for('admin.eating_egg_inventory'))
+
 @admin.route('/products')
 def manage_products():
     products = Product.query.order_by(Product.display_order).all()
