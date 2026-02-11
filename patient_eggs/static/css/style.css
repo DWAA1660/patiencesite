@@ -210,6 +210,13 @@ a:hover {
 }
 .btn-fall-4:hover { background-color: transparent; color: white; }
 
+.btn-fall-5 {
+    background-color: transparent;
+    color: white;
+    border: none;
+}
+.btn-fall-5:hover { background-color: transparent; color: white; }
+
 /* Icon Cards */
 .icon-card {
     background: var(--wheatgrass-yellow);
@@ -353,22 +360,28 @@ a:hover {
     /* Top Left */
     .mobile-egg-grid .egg-pos-1 {
         transform: rotate(-10deg) !important;
-        margin-top: 10px !important; /* Push down slightly to nestle */
+        margin-top: 10px !important;
     }
     /* Top Right */
     .mobile-egg-grid .egg-pos-2 {
         transform: rotate(10deg) !important;
         margin-top: 10px !important;
     }
-    /* Bottom Left */
+    /* Middle / Center (New) */
     .mobile-egg-grid .egg-pos-3 {
+        transform: rotate(0deg) !important;
+        margin-top: 0px !important;
+        grid-column: span 2; /* Center in 2-column grid if needed, or just let it flow */
+    }
+    /* Bottom Left */
+    .mobile-egg-grid .egg-pos-4 {
         transform: rotate(-10deg) !important;
-        margin-top: -15px !important; /* Tuck under top row */
+        margin-top: -5px !important; 
     }
     /* Bottom Right */
-    .mobile-egg-grid .egg-pos-4 {
+    .mobile-egg-grid .egg-pos-5 {
         transform: rotate(10deg) !important;
-        margin-top: -15px !important;
+        margin-top: -5px !important;
     }
 
     .welcome-to-prairie {
@@ -397,27 +410,40 @@ a:hover {
         pointer-events: auto;
     }
 
+    /* 5 Egg Layout - Bowl Shape */
+    
+    /* Far Left */
     .egg-pos-1 {
-        top: calc(50% + 60px);
-        left: calc(50% - 310px);
-        --egg-rot: -28deg;
+        top: calc(50% + 50px);
+        left: calc(50% - 350px);
+        --egg-rot: -25deg;
     }
     
+    /* Mid Left */
     .egg-pos-2 {
         top: calc(50% + 75px);
-        left: calc(50% - 170px);
+        left: calc(50% - 190px);
         --egg-rot: -12deg;
     }
     
+    /* Center */
     .egg-pos-3 {
+        top: calc(50% + 85px);
+        left: calc(50% - 60px); /* Center 120px wide element */
+        --egg-rot: 0deg;
+    }
+    
+    /* Mid Right */
+    .egg-pos-4 {
         top: calc(50% + 75px);
-        left: calc(50% + 30px);
+        left: calc(50% + 70px);
         --egg-rot: 12deg;
     }
     
-    .egg-pos-4 {
-        top: calc(50% + 60px);
-        left: calc(50% + 170px);
-        --egg-rot: 28deg;
+    /* Far Right */
+    .egg-pos-5 {
+        top: calc(50% + 50px);
+        left: calc(50% + 230px);
+        --egg-rot: 25deg;
     }
 }
